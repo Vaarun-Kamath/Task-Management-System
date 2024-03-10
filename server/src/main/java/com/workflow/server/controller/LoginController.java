@@ -1,4 +1,4 @@
-package com.workflow.server;
+package com.workflow.server.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
-
 @RestController
-public class ServerController {
+public class LoginController {
     
     @CrossOrigin("http://localhost:3000")
     @GetMapping("/api/hello")
