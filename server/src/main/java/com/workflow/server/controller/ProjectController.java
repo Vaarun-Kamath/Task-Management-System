@@ -27,6 +27,7 @@ public class ProjectController {
     @CrossOrigin("http://localhost:3000")
     @PostMapping("/api/addProject")
     public void addProjects(@RequestBody Project newProj) {
+        System.out.println("Received Project for insertion: " + newProj.toString());
         projrepo.insert(newProj);
     }
 }

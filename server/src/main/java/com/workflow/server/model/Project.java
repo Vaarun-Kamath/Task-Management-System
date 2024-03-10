@@ -1,11 +1,22 @@
 package com.workflow.server.model;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "project")
 public class Project {
     private String name;
-    private String desc;
+    private String description;
+    private Date deadline;
+    private Date createdOn;
+    private String backlog;
+    private String timeline;
+    private String createdBy;
+    private List<String> collaborators;
+    private List<String> tasks;
+    private String statistics;
 
     public Project() {
     }
@@ -14,23 +25,93 @@ public class Project {
         return this.name;
     }
 
-    public String getDesc() {
-        return this.desc;
+    public String getDescription() {
+        return this.description;
     }
 
-    public void setName(String newName) {
-        this.name = newName;
+    public Date getDeadline() {
+        return this.deadline;
     }
 
-    public void setDesc(String newDesc) {
-        this.desc = newDesc;
+    public Date getCreatedOn() {
+        return this.createdOn;
+    }
+
+    public String getBacklog() {
+        return this.backlog;
+    }
+
+    public String getTimeline() {
+        return this.timeline;
+    }
+
+    public String getCreatedBy() {
+        return this.createdBy;
+    }
+
+    public List<String> getCollaborators() {
+        return this.collaborators;
+    }
+
+    public List<String> getTasks() {
+        return this.tasks;
+    }
+
+    public String getStatistics() {
+        return this.statistics;
+    }
+
+    // Setter methods
+
+    public void setName(String new_name) {
+        this.name = new_name;
+    }
+
+    public void setDescription(String new_desc) {
+        this.description = new_desc;
+    }
+
+    public void setDeadline(Date new_date) {
+        this.deadline = new_date;
+    }
+
+    public void setBacklog(String new_backlog) {
+        this.backlog = new_backlog;
+    }
+
+    public void setTimeline(String new_timeline) {
+        this.timeline = new_timeline;
+    }
+
+    public void setCreatedBy(String creator) {
+        this.createdBy = creator;
+    }
+
+    public void setCollaborators(List<String> collabs) {
+        this.collaborators = collabs;
+    }
+
+    public void setTasks(List<String> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void setStatistics(String stats) {
+        this.statistics = stats;
     }
 
     @Override
     public String toString() {
         return "Project{" +
                 "name='" + name + '\'' +
-                ", desc='" + desc + '\'' +
+                ", description='" + description + '\'' +
+                ", deadline=" + deadline +
+                ", createdOn=" + createdOn +
+                ", backlog='" + backlog + '\'' +
+                ", timeline='" + timeline + '\'' +
+                ", created by='" + createdBy + '\'' +
+                ", collaborators='" + collaborators + '\'' +
+                ", tasks='" + tasks + '\'' +
+                ", statistics='" + statistics + '\'' +
                 '}';
     }
 }
