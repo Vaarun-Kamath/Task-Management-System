@@ -5,7 +5,7 @@ export default async function LoginPage({
 }: {
   searchParams: { [key: string]: string | null };
 }) {
-  const callbackUrl = searchParams.callbackUrl! || "/dashboard";
+  const callbackUrl = searchParams.callbackUrl! || "/home";
 
   return (
     <>

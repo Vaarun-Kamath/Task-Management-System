@@ -7,7 +7,8 @@ import { FaExclamationCircle } from "react-icons/fa";
 
 import StyledLink from "@/components/./atoms/StyledLink";
 import StyledInput from "@/components/atoms/StyledInput";
-import { LoginUser } from "@/app/api/login/handlers";
+
+import { signIn } from "next-auth/react";
 
 type Props = {
   callbackUrl?: string;
@@ -53,11 +54,17 @@ export default function LoginForm(props: Props) {
     try {
       if (!validateInputs(email, password)) return;
 
-      const res = await LoginUser(email.toString(), password.toString());
+      const res = await signIn("credentials", {
+        email: email.toString(),
+        password: password.toString(),
+        redirect: false,
+        callbackUrl: props.callbackUrl ? props.callbackUrl : "/home",
+      });
+      console.log("res", res);
       if (res?.error) {
         errorHandler(res.error);
       } else {
-        router.push(props.callbackUrl ? props.callbackUrl : "/dashboard");
+        router.push(props.callbackUrl ? props.callbackUrl : "/home");
       }
     } catch (err) {
       errorHandler("Please try again after some time");
@@ -67,17 +74,17 @@ export default function LoginForm(props: Props) {
   };
 
   return (
-    <div className="flex flex-col h-fit my justify-center w-2/5 gap-3 border-4 border-gray-500 rounded-md p-32">
+    <div className="flex flex-col justify-center w-3/6 border-2 p-10">
       <h1 className="mt-2 mb-6 text-4xl font-bold text-center">Sign In</h1>
-      <form onSubmit={handleSignIn} className="w-full flex flex-col gap-3">
+      <form onSubmit={handleSignIn} className="w-full">
         <StyledInput
-          className="w-full p-2 border border-gray-500 rounded-sm"
+          className="w-full p-2 my-3 border-gray-400 border"
           name="email"
           type="text"
           placeholder="Email"
         />
         <StyledInput
-          className="w-full p-2 border border-gray-500 rounded-sm"
+          className="w-full p-2 my-3 border-gray-400 border"
           name="password"
           type="password"
           placeholder="Password"

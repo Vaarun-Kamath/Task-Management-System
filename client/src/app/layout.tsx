@@ -1,6 +1,7 @@
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import { favicons } from "@/constants/FaviconList";
+import AuthProvider from "@/utils/sessionProvider";
 
 const inter = Open_Sans({
   subsets: ["latin"],
@@ -16,7 +17,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <link key={linkProps.href} {...linkProps} />
         ))}
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 };
