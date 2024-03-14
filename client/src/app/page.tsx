@@ -6,7 +6,6 @@ export default async function LoginPage({
   searchParams: { [key: string]: string | null };
 }) {
   const callbackUrl = searchParams.callbackUrl! || "/home";
-
   return (
     <>
       <div className="w-full h-screen flex justify-center items-center">

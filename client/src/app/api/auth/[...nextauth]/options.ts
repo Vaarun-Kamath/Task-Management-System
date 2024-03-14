@@ -4,14 +4,17 @@ import { userLoginHandler } from "../handlers";
 import jwt from "jsonwebtoken";
 import { AuthPayload } from "@/types";
 
-
-
 export const authOptions: NextAuthOptions = {
+  session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      type: "credentials",
       credentials: {
-        email: { label: "email", type: "text", placeholder: "Email" },
+        email: {
+          label: "email",
+          type: "text",
+          placeholder: "Email",
+        },
         password: {
           label: "password",
           type: "password",
@@ -21,12 +24,12 @@ export const authOptions: NextAuthOptions = {
       async authorize(
         credentials: Record<"email" | "password", string> | undefined
       ) {
-        console.log("IN AUTHORIZE");
         if (!credentials) {
-          throw new Error("Please fill in all the fieadadwlds");
+          throw new Error("Please fill in all the fields");
         }
 
         const res = await userLoginHandler(credentials);
+        console.log("-----------res::: ", res);
         if (res.errorCode) {
           throw new Error(res.errorMessage);
         } else if (res.status === 200) {
@@ -35,17 +38,11 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  pages: {
-    signIn: "/",
-    signOut: "/",
-  },
-
   jwt: {
     secret: process.env.NEXTAUTH_SECRET,
     maxAge: 60 * 60,
     encode: async ({ secret, token, maxAge }) => {
       if (!token || !maxAge) return Promise.resolve("");
-
       const jwtClaims = {
         sub: token.id,
         iat: Date.now() / 1000,
@@ -67,11 +64,14 @@ export const authOptions: NextAuthOptions = {
       }
     },
   },
-  session: { strategy: "jwt" },
+  pages: {
+    signIn: "/",
+    signOut: "/",
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.user = user.user;
+        token.user = user;
       }
       return token;
     },

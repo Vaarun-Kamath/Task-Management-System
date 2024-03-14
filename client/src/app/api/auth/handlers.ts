@@ -6,13 +6,6 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 export async function userLoginHandler(
   credentials: Record<"email" | "password", string>
 ) {
-  console.log("credentials", credentials);
-  console.log("BACKEND_URL", BACKEND_URL);
-  console.log(
-    "process.env.NEXT_PUBLIC_BACKEND_URL",
-    process.env.NEXT_PUBLIC_BACKEND_URL
-  );
-  console.log("process.env.NEXTAUTH_URL", process.env.NEXTAUTH_URL);
   try {
     const response = await axiosInstance.post(
       `${BACKEND_URL}/login`,

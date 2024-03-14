@@ -1,5 +1,10 @@
-export const allowedRoutes: Array<{ name: string; link: string }> = [
-  { name: "Home", link: "/home" },
-  { name: "My Profile", link: "/profile" },
-  { name: "Projects", link: "/project" },
-];
+type AllowedRoutesType = {
+  [key: string]: { pages: Array<string> };
+  userRole: { pages: Array<string> };
+};
+
+export const allowedRoutes: AllowedRoutesType = {
+  userRole: {
+    pages: ["/home", "/project", "/projects"],
+  },
+};
