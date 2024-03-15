@@ -30,14 +30,12 @@ public class ProjectController {
         response.put("data", content);
         return response;
     }
-
     @GetMapping("/api/projects")
     @CrossOrigin("http://localhost:3000")
     public ResponseEntity<Map<String, Object>> getAllProjects() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projrepo.findAll()));
     }
-
     @PostMapping("/api/addProject")
     @CrossOrigin("http://localhost:3000")
     public void addProjects(@RequestBody Project newProj) {
