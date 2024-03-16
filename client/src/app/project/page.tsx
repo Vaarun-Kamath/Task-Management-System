@@ -29,33 +29,7 @@ function Projects() {
             <div className="flex flex-wrap gap-4">
                 {projects && projects.map((project) => (
                     <Card>
-                        <h2>{project.name}</h2>
-                        <p>Description: {project.description}</p>
-                        <p>Deadline: {project.deadline}</p>
-                        <p>Created On: {project.createdOn}</p>
-                        <p>Backlog: {project.backlog}</p>
-                        <p>Timeline: {project.timeline}</p>
-                        <p>Created By: {project.createdBy}</p>
-
-                        <div>
-                            <h4>Collaborators:</h4>
-                            <ul>
-                                {project.collaborators.map((collaborator, index) => (
-                                    <li key={index}>{collaborator}</li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h4>Tasks:</h4>
-                            <ul>
-                                {project.tasks.map((task, index) => (
-                                    <li key={index}>{task}</li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        <p>Statistics: {project.statistics}</p>
+                        {project}
                     </Card>
                 ))}
             </div>
