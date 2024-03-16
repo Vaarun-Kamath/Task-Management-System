@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+// import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,16 +30,14 @@ public class ProjectController {
         response.put("data", content);
         return response;
     }
-
-    @CrossOrigin("http://localhost:3000")
     @GetMapping("/api/projects")
+    @CrossOrigin("http://localhost:3000")
     public ResponseEntity<Map<String, Object>> getAllProjects() {
         return ResponseEntity.status(HttpStatus.OK)
-            .body(getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projrepo.findAll()));
+                .body(getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projrepo.findAll()));
     }
-    
-    @CrossOrigin("http://localhost:3000")
     @PostMapping("/api/addProject")
+    @CrossOrigin("http://localhost:3000")
     public void addProjects(@RequestBody Project newProj) {
         System.out.println("Received Project for insertion: " + newProj.toString());
         projrepo.insert(newProj);

@@ -1,10 +1,13 @@
 "use client";
 
 import React from "react";
-import { allowedRoutes } from "@/constants/AllowedRoutes";
 import StyledLink from "./atoms/StyledLink";
+import userLinks from "@/constants/UserLinks";
+import { signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 export default function Sidebar() {
+  const pathname = usePathname();
   return (
     <>
       <aside
@@ -15,16 +18,34 @@ export default function Sidebar() {
         <div className="flex justify-center">
           <p className="text-white font-semibold text-xl">Project Management</p>
         </div>
-        <div className="flex flex-col gap-3">
-          {allowedRoutes.map((links, index) => (
-            <StyledLink
-              href={links.link}
-              key={index}
-              className="flex flex-row gap-5 border-white p-5 text-white hover:bg-blue-900 transition-all duration-200"
-            >
-              {links.name}
-            </StyledLink>
-          ))}
+        <div className="flex flex-col items-center flex-1 gap-10">
+          <div className="flex flex-col gap-3 w-full">
+            {userLinks.map(
+              (
+                links: {
+                  name: string;
+                  link: string;
+                },
+                index: any
+              ) => (
+                <StyledLink
+                  href={links.link}
+                  key={index}
+                  className="flex flex-row gap-5 p-5 text-white hover:bg-blue-900 transition-all duration-200"
+                >
+                  {links.name}
+                </StyledLink>
+              )
+            )}
+          </div>
+          <button
+            className="flex flex-row gap-5 border-white px-5 py-3 w-fit text-white bg-slate-600 hover:bg-red-600 font-bold justify-center rounded transition-all duration-200"
+            onClick={() => {
+              signOut({ redirect: true, callbackUrl: pathname });
+            }}
+          >
+            Logout
+          </button>
         </div>
       </aside>
     </>

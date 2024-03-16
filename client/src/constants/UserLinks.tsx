@@ -3,13 +3,12 @@ const userLinks: Array<{
   link: string;
 }> = [
   {
-    name: "home",
+    name: "Home",
     link: "/home",
   },
   {
-    name: "View Profile",
-    link: "/profile",
-  },
+    name: "Project",
+    link: "/project",
+  }
 ];
-
 export default userLinks;

@@ -60,7 +60,6 @@ export default function LoginForm(props: Props) {
         redirect: false,
         callbackUrl: props.callbackUrl ? props.callbackUrl : "/home",
       });
-      console.log("res", res);
       if (res?.error) {
         errorHandler(res.error);
       } else {
