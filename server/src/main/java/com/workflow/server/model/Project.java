@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "project")
 public class Project {
+    private String _id;
     private String name;
     private String description;
     private Date deadline;
@@ -21,6 +22,10 @@ public class Project {
     public Project() {
     }
 
+    public String get_id() {
+        return this._id;
+    }
+    
     public String getName() {
         return this.name;
     }

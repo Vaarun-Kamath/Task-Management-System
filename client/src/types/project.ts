@@ -1,6 +1,5 @@
-import { User } from "./user";
-
 export interface Project {
+    _id: string,
     name: string;
     description: string;
     deadline: string;

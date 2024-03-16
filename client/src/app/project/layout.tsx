@@ -6,9 +6,11 @@ export default async function ProjectLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex w-full flex-wrap flex-row">
+    <div className="flex flex-wrap">
       <Sidebar />
-      {children}
-    </section>
+      <div className="flex flex-grow w-full lg:w-auto">
+        {children}
+      </div>
+    </div>
   );
 }

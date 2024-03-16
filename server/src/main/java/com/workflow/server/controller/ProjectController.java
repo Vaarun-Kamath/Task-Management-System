@@ -2,7 +2,6 @@ package com.workflow.server.controller;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.workflow.server.ProjectRepository;
 import com.workflow.server.model.Project;
-import com.workflow.server.model.User;
 
 @RestController
 public class ProjectController {
@@ -44,15 +42,32 @@ public class ProjectController {
     @CrossOrigin("http://localhost:3000")
     public ResponseEntity<Map<String, Object>> getAllProjects(@RequestParam String user_id) {
 
+        if (user_id == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(getErrorResponse(HttpStatus.BAD_REQUEST.value(), "You Must Login First"));
+        }
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projrepo.findByCreatedBy(user_id)));
+    }
+
+    @GetMapping("/api/projectById")
+    @CrossOrigin("http://localhost:3000")
+    public ResponseEntity<Map<String, Object>> getProjectById(@RequestParam String project_id) {
+        System.out.println("TESTING " + project_id);
+        if (project_id == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Project ID"));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projrepo.findById(project_id)));
     }
 
     @PostMapping("/api/addProject")
     @CrossOrigin("http://localhost:3000")
     public ResponseEntity<Map<String, Object>> addProjects(@RequestBody Project newProj) {
         System.out.println("Received Project for insertion: " + newProj);
-        // projrepo.insert(newProj);
         try {
             String name = newProj.getName();
             Date createdOn = newProj.getCreatedOn();
@@ -62,6 +77,7 @@ public class ProjectController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing name, createdOn or createdBy"));
             }
+
             projrepo.insert(newProj);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(getSuccessResponse(HttpStatus.OK.value(), "Success", newProj));

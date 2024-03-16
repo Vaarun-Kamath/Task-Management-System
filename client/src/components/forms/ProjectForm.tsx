@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import StyledInput from "../atoms/StyledInput";
 import { FaExclamationCircle } from "react-icons/fa";
@@ -15,8 +15,6 @@ type Props = {
 export default function ProjectForm(props: Props) {
     const [projectError, setProjectError] = useState<null | string>(null);
     const [loading, setLoading] = useState(false);
-
-    const router = useRouter();
 
     const { data: session } = useSession({
         required: true,
@@ -66,13 +64,10 @@ export default function ProjectForm(props: Props) {
         const description = formData.get("description") || "";
         const deadline = formData.get("deadline") || "";
 
-        // console.log("NEW PROJECT: ", newProject);
-
         try {
             if (!validateInputs(name, deadline)) return;
             const addedProject = await AddProject(name.toString(), description.toString(), deadline.toString(), session?.user.user_id);
             console.log("New Project Created", addedProject);
-            // router.push('/project');
             window.location.reload();
         } catch (err) {
             errorHandler("Error creating project.");
