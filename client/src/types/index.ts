@@ -1,5 +1,5 @@
 export type AuthPayload = {
   username: string;
   email: string;
-  user_id: number | null;
+  user_id: string | null;
 };
