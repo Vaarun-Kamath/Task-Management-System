@@ -13,7 +13,7 @@ export default function Home() {
   const user = session?.user;
   return (
     <section className="flex flex-row gap-5 mt-4">
-      <div>Hello {user?.email}</div>
+      <div>Hello {user ? JSON.stringify(user) : null}</div>
     </section>
   );
 }
