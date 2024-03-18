@@ -41,7 +41,7 @@ export default function Sidebar() {
       {loading ? (
         <aside
           id="sidebar"
-          className={`fixed lg:relative top-0 left-0 z-40 w-[15rem] lg:w-[17.5rem] h-screen transition-transform pt-10 flex flex-col gap-10 ${
+          className={`fixed select-none lg:relative top-0 left-0 z-40 w-[15rem] lg:w-[17.5rem] h-screen transition-transform pt-10 flex flex-col gap-10 ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
           } border-r lg:translate-x-0 bg-gray-800 border-gray-700`}
         >
@@ -63,7 +63,7 @@ export default function Sidebar() {
         </aside>
       ) : (
         <>
-          <nav className="lg:hidden fixed top-0 z-50 flex items-center justify-between h-10 w-full px-3 py-1.5 bg-gray-800 border-b border-gray-700 max-w-screen lg:px-5 lg:pl-3">
+          <nav className="lg:hidden select-none fixed top-0 z-50 flex items-center justify-between h-10 w-full px-3 py-1.5 bg-gray-800 border-b border-gray-700 max-w-screen lg:px-5 lg:pl-3">
             <div className="flex items-center justify-start rtl:justify-end">
               <button
                 type="button"
@@ -77,7 +77,7 @@ export default function Sidebar() {
           </nav>
           <aside
             id="sidebar"
-            className={`fixed lg:relative top-0 left-0 z-40 w-[15rem] lg:w-[17.5rem] h-screen transition-transform pt-10 flex flex-col gap-10 ${
+            className={`fixed select-none lg:relative top-0 left-0 z-40 w-[15rem] lg:w-[17.5rem] h-screen transition-transform pt-10 flex flex-col gap-10 ${
               sidebarOpen
                 ? "translate-x-0"
                 : "-translate-x-full lg:translate-x-0"

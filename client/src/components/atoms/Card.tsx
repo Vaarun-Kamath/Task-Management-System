@@ -1,9 +1,9 @@
 import { Project } from "@/types/project";
 import StyledLink from "./StyledLink";
 
-export default function Card({ children }: { children: Project }) {
+export default function Card(props: { data: Project; href: string }) {
   const currDate = new Date();
-  const deadlineDate = new Date(children.deadline as string);
+  const deadlineDate = new Date(props.data.deadline as string);
   let timeLeft = (deadlineDate as any) - (currDate as any);
   let weeksLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24 * 7));
   let daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
@@ -33,12 +33,12 @@ export default function Card({ children }: { children: Project }) {
 
   return (
     <StyledLink
-      className="border-2 hover:bg-gray-700 hover:text-white p-5 transition-all duration-200"
-      href={""}
+      className="border-2 hover:bg-gray-700 hover:text-white p-5 transition-all duration-200 select-none"
+      href={props.href}
     >
       <div className="">
-        <h2 className="font-bold">{children.name}</h2>
-        <p>Description: {children.description}</p>
+        <h2 className="font-bold">{props.data.name}</h2>
+        <p>Description: {props.data.description}</p>
 
         {/* Display the highest non-zero unit of time */}
         {value !== 0 && (

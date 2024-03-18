@@ -46,14 +46,20 @@ function Projects() {
         >
           <span>
             <MdAddChart />
-          </span>{" "}
+          </span>
           Add Project
         </button>
       </div>
       {showModal && <AddProject setShowModal={setShowModal} />}
       <div className="grid grid-cols-3 gap-x-3 gap-y-2 w-full">
         {projects &&
-          projects.map((project, index) => <Card key={index}>{project}</Card>)}
+          projects.map((project, index) => (
+            <Card
+              data={project}
+              href={`/project/${project._id}`}
+              key={index}
+            ></Card>
+          ))}
       </div>
     </div>
   );
