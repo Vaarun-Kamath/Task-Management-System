@@ -2,7 +2,9 @@ package com.workflow.server.controller;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,8 @@ public class ProjectController {
     @Autowired
     ProjectRepository projrepo;
 
+    // Helper Functions
+
     private Map<String, Object> getSuccessResponse(int status, String successCode, Object content) {
         Map<String, Object> response = new HashMap<>();
         response.put("status", status);
@@ -37,6 +41,8 @@ public class ProjectController {
         response.put("error", message);
         return response;
     }
+
+    // Get Mappings
 
     @GetMapping("/api/projects")
     @CrossOrigin("http://localhost:3000")
@@ -54,7 +60,7 @@ public class ProjectController {
     @GetMapping("/api/projectById")
     @CrossOrigin("http://localhost:3000")
     public ResponseEntity<Map<String, Object>> getProjectById(@RequestParam String project_id) {
-        System.out.println("TESTING " + project_id);
+
         if (project_id == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Project ID"));
@@ -63,6 +69,8 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projrepo.findById(project_id)));
     }
+
+    // Post mappings
 
     @PostMapping("/api/addProject")
     @CrossOrigin("http://localhost:3000")
