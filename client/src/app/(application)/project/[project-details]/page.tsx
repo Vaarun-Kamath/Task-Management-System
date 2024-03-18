@@ -2,6 +2,7 @@
 
 import { GetProjectById } from "@/app/api/project/handler";
 import PageHeader from "@/components/atoms/PageHeader";
+import AddCollaboratorSection from "@/components/sections/addCollaboratorSection";
 import { Project } from "@/types/project";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
@@ -37,7 +38,8 @@ export default function ProjectDetails({
   }, [session, projectId]);
 
   return (
-    <section>
+    <div className="flex flex-col px-2 mb-4 gap-5">
+      <AddCollaboratorSection />
       <p>name: {project?.name}</p>
       <p>description: {project?.description}</p>
       <p>deadline: {project?.deadline}</p>
@@ -48,6 +50,6 @@ export default function ProjectDetails({
       <p>backlog: {project?.backlog}</p>
       <p>timeline: {project?.timeline}</p>
       <p>statistics: {project?.statistics}</p>
-    </section>
+    </div>
   );
 }
