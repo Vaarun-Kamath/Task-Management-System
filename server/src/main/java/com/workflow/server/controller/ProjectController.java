@@ -96,4 +96,50 @@ public class ProjectController {
                     .body(getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
         }
     }
+
+    // Controller - Controller communication functions
+    public boolean addCollaborator(String proj_id, String collab_id) {
+        System.out.println("IN ADD COLLAB " + proj_id + "asdasd" + collab_id);
+        try {
+            if (proj_id == null) {
+                System.out.println("Project ID is null.");
+                return false;
+            }
+
+            System.out.println("Test");
+
+            Optional<Project> projectOptional = projrepo.findById(proj_id);
+
+            System.out.println("Test2");
+            
+            if(projectOptional.isEmpty()) {
+                System.out.println("Project not found.");
+                return false;
+            }
+
+            System.out.println("PROJECTOPTIONAL");
+            System.out.println(projectOptional);
+
+            // Change once Task class is built
+            Project project = projectOptional.get();
+            List<String> collaborators = project.getCollaborators();
+
+            System.out.println("collaborators");
+            System.out.println(collaborators);
+
+            collaborators.add(collab_id);
+            project.setCollaborators(collaborators);
+
+            System.out.println("collaborators");
+            System.out.println(project.getCollaborators());
+
+            projrepo.save(project);
+
+            return true;
+
+        } catch (Exception e) {
+            System.out.println("Internal server error");
+            return false;
+        }
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,20 @@ public class LoginController {
 
     @Autowired
     UserRepository userRepo;
+
+    @CrossOrigin("http://localhost:3000")
+    @GetMapping("/bitchybitch")
+    public ResponseEntity<Map<String, Object>> test() {
+        ProjectController pc = new ProjectController();
+
+        boolean success = pc.addCollaborator("65f5248a4ee6ea483d55223e", "65f4591fc7dd4b1f54a26daa");
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", success);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                            .body(getSuccessResponse(HttpStatus.OK.value(), "Success", response));
+    }
+
 
     @CrossOrigin("http://localhost:3000")
     @PostMapping("/login")
