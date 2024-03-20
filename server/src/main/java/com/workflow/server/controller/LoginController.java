@@ -31,12 +31,11 @@ public class LoginController {
         response.put("status", success);
 
         return ResponseEntity.status(HttpStatus.OK)
-                            .body(getSuccessResponse(HttpStatus.OK.value(), "Success", response));
+                .body(getSuccessResponse(HttpStatus.OK.value(), "Success", response));
     }
 
-
     @CrossOrigin("http://localhost:3000")
-    @PostMapping("/login")
+    @PostMapping("/api/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> request) {
         System.out.println("LoginController.login() called");
         try {

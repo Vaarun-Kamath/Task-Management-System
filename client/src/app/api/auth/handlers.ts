@@ -8,7 +8,7 @@ export async function userLoginHandler(
 ) {
   try {
     const response = await axiosInstance.post(
-      `${BACKEND_URL}/login`,
+      `${BACKEND_URL}/api/login`,
       credentials
     );
     const { data } = response;
