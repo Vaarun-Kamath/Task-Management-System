@@ -11,7 +11,7 @@ import AddTask from "@/components/modals/addTaskModal";
 import AddButton from "@/components/atoms/AddButton";
 import { Project } from "@/types/project";
 import { Task } from "@/types/task";
-import Card from "@/components/atoms/Card";
+import { TaskCard } from "@/components/atoms/Card";
 
 export default function ProjectDetails({ params }: { params: { "project-details": string } }) {
   const { "project-details": projectId } = params;
@@ -89,10 +89,7 @@ export default function ProjectDetails({ params }: { params: { "project-details"
           <p>statistics: {project?.statistics}</p>
           <div className="grid md:grid-cols-3 gap-x-3 gap-y-2 w-full">
             {tasks && tasks.map((task, index) => (
-              <Card
-                data={task}
-                href={`/tasks/${task._id}`}
-                key={index} />
+              <TaskCard data={task} href={`/tasks/${task._id}`} key={index}/>
             ))}
           </div>
         </div>

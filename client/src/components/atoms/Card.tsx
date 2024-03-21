@@ -63,7 +63,7 @@ export default function Card(props: {
       <div className="">
         <h2 className="font-bold">{props.name}</h2>
         <p>Description: {props.description}</p>
-        
+
         {props.children}
 
         {/* Display the highest non-zero unit of time */}
@@ -101,6 +101,6 @@ export function TaskCard(props: { data: Task; href: string }) {
     name={task.title}
     description={task.description}
     href={props.href}>
-      <p className={`text-${{clr}}-500 font-semibold`}>{task.status}</p>
+      <p className={`text-${clr}-500 font-semibold`}>{task.status}</p>
     </Card>
 }

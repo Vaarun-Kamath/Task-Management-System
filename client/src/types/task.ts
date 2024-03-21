@@ -7,6 +7,6 @@ export interface Task {
     createdBy: string;
     projectId: string;
     status: string;
-    priority: string;
+    priority: number;
     assignees: string[];
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Project } from "@/types/project";
-import Card from "@/components/atoms/Card";
+import { ProjectCard } from "@/components/atoms/Card";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { GetProjects } from "@/app/api/project/handler";
@@ -45,11 +45,7 @@ function Projects() {
       <div className="grid md:grid-cols-3 gap-x-3 gap-y-2 w-full">
         {projects &&
           projects.map((project, index) => (
-            <Card
-              data={project}
-              href={`/projects/${project._id}`}
-              key={index}
-            ></Card>
+            <ProjectCard data={project} href={`/projects/${project._id}`} key={index}/>
           ))}
       </div>
     </div>
