@@ -2,15 +2,15 @@ import { AddCollaborator } from "@/app/api/project/handler";
 import React, { useState } from "react";
 import { IoPersonAddSharp } from "react-icons/io5";
 
-function AddCollaboratorSection() {
-  const [collaboratorEmail, setCollaboratorEmail] = useState("");
+function AddCollaboratorSection(props: { projectId: string }) {
+  const [collaboratorUsername, setCollaboratorUsername] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleAddCollaborator = async () => {
     setLoading(true);
     ("use server");
     try {
-      const res = await AddCollaborator(collaboratorEmail);
+      const res = await AddCollaborator(collaboratorUsername, props.projectId);
 
       if (res.errorCode) {
         console.log("Error adding collaborator", res);
@@ -31,9 +31,9 @@ function AddCollaboratorSection() {
       <div className="flex gap-3">
         <input
           className="p-2 w-1/5 focus:ring-0 border-2 rounded-md transition-all duration-200 focus:border-gray-700"
-          type="email"
-          placeholder="Enter email"
-          onChange={(e) => setCollaboratorEmail(e.target.value)}
+          type="text"
+          placeholder="Enter username"
+          onChange={(e) => setCollaboratorUsername(e.target.value)}
           disabled={loading}
         />
         <button

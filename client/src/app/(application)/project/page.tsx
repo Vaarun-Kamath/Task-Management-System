@@ -11,7 +11,7 @@ import AddProject from "@/components/modals/addProjectModal";
 import { MdAddChart } from "react-icons/md";
 
 function Projects() {
-  const [projects, setProjects] = useState<Project[] | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
@@ -27,8 +27,8 @@ function Projects() {
       try {
         const user_id = user?.user_id;
         const response = await GetProjects(user_id);
-        console.log(response.data);
-        setProjects(response.data);
+        console.log("response:", response);
+        setProjects(response.content);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -36,6 +36,10 @@ function Projects() {
 
     fetchData();
   }, [session, user?.user_id]);
+
+  useEffect(() => {
+    console.log("projects:", projects);
+  }, [projects]);
 
   return (
     <div className="flex flex-col px-2 mb-4 gap-5 items-center">

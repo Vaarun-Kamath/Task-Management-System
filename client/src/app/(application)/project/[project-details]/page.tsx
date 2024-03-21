@@ -39,7 +39,7 @@ export default function ProjectDetails({
 
   return (
     <div className="flex flex-col px-2 mb-4 gap-5">
-      <AddCollaboratorSection />
+      <AddCollaboratorSection projectId = {projectId}/>
       <p>name: {project?.name}</p>
       <p>description: {project?.description}</p>
       <p>deadline: {project?.deadline}</p>

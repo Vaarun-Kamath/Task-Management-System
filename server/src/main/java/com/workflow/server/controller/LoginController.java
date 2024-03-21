@@ -15,16 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.workflow.server.ProjectRepository;
 import com.workflow.server.UserRepository;
 import com.workflow.server.model.User;
+import com.workflow.server.utils.commonResponse;
 
 @RestController
 public class LoginController {
 
     @Autowired
-    UserRepository userRepo;
+    private UserRepository userRepo;
 
-    // To communicate with Project Controller
-    @Autowired
-    ProjectController projectController;
+    private commonResponse respond = new commonResponse();
 
     @CrossOrigin("http://localhost:3000")
     @PostMapping("/api/login")
@@ -35,7 +34,7 @@ public class LoginController {
             String password = request.get("password");
             if (email == null || password == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing email or password"));
+                        .body(respond.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing email or password"));
             }
 
             User data = CheckLogin(email);
@@ -51,35 +50,20 @@ public class LoginController {
                     user.put("username", data.getUsername());
 
                     return ResponseEntity.status(HttpStatus.OK)
-                            .body(getSuccessResponse(HttpStatus.OK.value(), "Success", user));
+                            .body(respond.getSuccessResponse(HttpStatus.OK.value(), "Success", user));
                 } else {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                            .body(getErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Incorrect credentials"));
+                            .body(respond.getErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Incorrect credentials"));
                 }
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
+                        .body(respond.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
             }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
+                    .body(respond.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
         }
-    }
-
-    private Map<String, Object> getSuccessResponse(int status, String successCode, Map<String, Object> content) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", status);
-        response.put("successCode", successCode);
-        response.put("content", content);
-        return response;
-    }
-
-    private Map<String, Object> getErrorResponse(int status, String message) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", status);
-        response.put("error", message);
-        return response;
     }
 
     public User CheckLogin(String email) {

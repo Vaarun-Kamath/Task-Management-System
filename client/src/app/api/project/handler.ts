@@ -12,6 +12,7 @@ export async function GetProjects(user_id: string | null | undefined) {
       },
     });
     const { data } = response;
+    console.log(data);
     return data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {
@@ -90,12 +91,13 @@ export async function AddProject(
   }
 }
 
-export async function AddCollaborator(email: string) {
+export async function AddCollaborator(username: string, projectId: string) {
   try {
     const response = await axiosInstance.post(
       `${BACKEND_URL}/api/addCollaborator`,
       {
-        email: email,
+        username: username,
+        projectId: projectId,
       }
     );
     const { data } = response;
