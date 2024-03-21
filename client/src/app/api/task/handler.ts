@@ -63,7 +63,7 @@ export async function AddTask(
   try {
     // console.log(project);
     const response = await axiosInstance.post(
-      `${BACKEND_URL}/api/addProject`,
+      `${BACKEND_URL}/api/addTask`,
       {
         title: tasktitle,
         description: taskDesc as string,
