@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.workflow.server.ProjectRepository;
 import com.workflow.server.UserRepository;
 import com.workflow.server.model.User;
 
@@ -21,19 +22,9 @@ public class LoginController {
     @Autowired
     UserRepository userRepo;
 
-    @CrossOrigin("http://localhost:3000")
-    @GetMapping("/bitchybitch")
-    public ResponseEntity<Map<String, Object>> test() {
-        ProjectController pc = new ProjectController();
-
-        boolean success = pc.addCollaborator("65f5248a4ee6ea483d55223e", "65f4591fc7dd4b1f54a26daa");
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", success);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                            .body(getSuccessResponse(HttpStatus.OK.value(), "Success", response));
-    }
-
+    // To communicate with Project Controller
+    @Autowired
+    ProjectController projectController;
 
     @CrossOrigin("http://localhost:3000")
     @PostMapping("/login")
