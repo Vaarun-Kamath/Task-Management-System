@@ -41,7 +41,7 @@ export default function ProjectDetails({ params }: { params: { "project-details"
           setProject(response.content);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data[Project]:", error);
       }
     };
 
@@ -54,10 +54,11 @@ export default function ProjectDetails({ params }: { params: { "project-details"
       try {
         if (projectId) {
           const response = await GetTasks(projectId);
+          console.log(response, response.content)/////////////////
           setTasks(response.content);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data[Tasks]:", error);
       }
     };
 
@@ -69,7 +70,7 @@ export default function ProjectDetails({ params }: { params: { "project-details"
       {loading ? null : (
         <div className="flex flex-col px-2 mb-4 gap-5">
           <AddCollaboratorSection projectId={projectId} />
-          {showModal && <AddTask setShowModal={setShowModal} />}
+          {showModal && <AddTask setShowModal={setShowModal} projectId={projectId} />}
           <div className="w-half">
             <AddButton onclick={()=>setShowModal(true)} >Add Task</ AddButton>
           </div>

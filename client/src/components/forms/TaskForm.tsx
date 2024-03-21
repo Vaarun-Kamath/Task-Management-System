@@ -8,7 +8,7 @@ import { AddTask } from "@/app/api/task/handler";
 import StyledInput from "../atoms/StyledInput";
 import SubmitButton from "../atoms/SubmitButton";
 
-type Props = { callbackUrl?: string; };
+type Props = { callbackUrl?: string; projectId: string};
 
 export default function TaskForm(props: Props) {
   const [taskError, setTaskError] = useState<null | string>(null);
@@ -62,7 +62,7 @@ export default function TaskForm(props: Props) {
         description.toString(),
         dueDate.toString(),
         session?.user.user_id,
-        "TODO_PROJ_VARUNC_ME"//TODO projectId.toString()
+        props.projectId.toString()
       );
       console.log("New Task Created", addedProject);
       window.location.reload();
