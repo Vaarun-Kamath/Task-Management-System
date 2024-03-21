@@ -6,7 +6,7 @@ import AddCollaboratorSection from "@/components/sections/addCollaboratorSection
 import { Project } from "@/types/project";
 import { useSession } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 export default function ProjectDetails({
   params,
@@ -25,13 +25,14 @@ export default function ProjectDetails({
     },
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchData = async () => {
       try {
         const response = await GetProjectById(projectId);
         if (response.errorCode) {
           console.log("Error getting project", response);
-          window.location.href = "/404";
+          // window.location.href = "/404";
+          router.push("/404");
         } else {
           setLoading(false);
           setProject(response.content);
@@ -42,7 +43,7 @@ export default function ProjectDetails({
     };
 
     fetchData();
-  }, [session, projectId]);
+  }, [session, projectId, router]);
 
   return (
     <>
