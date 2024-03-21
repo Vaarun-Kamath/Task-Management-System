@@ -7,6 +7,7 @@ import StyledInput from "../atoms/StyledInput";
 import { FaExclamationCircle } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 import { AddProject } from "@/app/api/project/handler";
+import SubmitButton from "../atoms/SubmitButton";
 
 type Props = {
   callbackUrl?: string;
@@ -106,23 +107,7 @@ export default function ProjectForm(props: Props) {
           <FaExclamationCircle className="mr-2 animate-pulse" /> {projectError}
         </span>
       )}
-
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full font-medium flex items-center justify-center transition-all duration-200 text-white text-lg rounded-sm bg-slate-900 hover:bg-slate-800 py-2.5 mt-7 mb-6"
-      >
-        Create
-        {loading && (
-          <Image
-            src="images/bars.svg"
-            alt="Loading"
-            className="ml-2 text-white select-none"
-            width={15}
-            height={15}
-          />
-        )}
-      </button>
+      <SubmitButton sz={15} loading={loading}> Create </SubmitButton>
     </form>
   );
 }

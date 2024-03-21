@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { GetProjects } from "@/app/api/project/handler";
 import AddProject from "@/components/modals/addProjectModal";
-import { MdAddChart } from "react-icons/md";
+import AddButton from "@/components/atoms/AddButton";
 
 function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -39,15 +39,7 @@ function Projects() {
   return (
     <div className="flex flex-col px-2 mb-4 gap-5 items-center">
       <div className="w-full">
-        <button
-          className="flex border-2 items-center gap-2 px-4 py-1 rounded-sm hover:bg-gray-700 hover:text-white transition-all duration-200"
-          onClick={() => setShowModal(true)}
-        >
-          <span>
-            <MdAddChart />
-          </span>
-          Add Project
-        </button>
+        <AddButton onclick={() => setShowModal(true)} >Add Project</AddButton>
       </div>
       {showModal && <AddProject setShowModal={setShowModal} />}
       <div className="grid md:grid-cols-3 gap-x-3 gap-y-2 w-full">

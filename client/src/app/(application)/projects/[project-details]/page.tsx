@@ -1,12 +1,14 @@
 "use client";
 
+import { useLayoutEffect, useState } from "react";
+import { redirect, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { GetProjectById } from "@/app/api/project/handler";
 import PageHeader from "@/components/atoms/PageHeader";
 import AddCollaboratorSection from "@/components/sections/addCollaboratorSection";
+import AddTask from "@/components/modals/addTaskModal";
+import AddButton from "@/components/atoms/AddButton";
 import { Project } from "@/types/project";
-import { useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
-import { useLayoutEffect, useState } from "react";
 
 export default function ProjectDetails({
   params,
@@ -16,6 +18,7 @@ export default function ProjectDetails({
   const { "project-details": projectId } = params;
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
   const { data: session } = useSession({
@@ -50,6 +53,10 @@ export default function ProjectDetails({
       {loading ? null : (
         <div className="flex flex-col px-2 mb-4 gap-5">
           <AddCollaboratorSection projectId={projectId} />
+          {showModal && <AddTask setShowModal={setShowModal} />}
+          <div className="w-half">
+            <AddButton onclick={()=>setShowModal(true)} >Add Task</ AddButton>
+          </div>
           <p>name: {project?.name}</p>
           <p>description: {project?.description}</p>
           <p>deadline: {project?.deadline}</p>
