@@ -1,15 +1,14 @@
 import { Project } from "@/types/project";
 import StyledLink from "./StyledLink";
+import { Task } from "@/types/task";
+import { ReactNode } from "react";
 
-export default function Card(props: { data: Project; href: string }) {
-  const currDate = new Date();
-  const deadlineDate = new Date(props.data.deadline as string);
-  let timeLeft = (deadlineDate as any) - (currDate as any);
-
-  let highestUnit;
+function timing(deadline: String){
+  let highestUnit = "seconds";
   let value = -1;
-
-  let tasksLeft = props.data.tasks.length; // Change once Task Class is added
+  const currDate = new Date();
+  const deadlineDate = new Date(deadline as string);
+  let timeLeft = (deadlineDate as any) - (currDate as any);
 
   if (timeLeft>0) {
     let weeksLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24 * 7));
@@ -37,6 +36,21 @@ export default function Card(props: { data: Project; href: string }) {
     }
   }
 
+  return { highestUnit:highestUnit, value: value };
+}
+
+export default function Card(props: {
+  deadline: string, 
+  name: string, 
+  description: string, 
+  href: string,
+  children: ReactNode 
+}) {
+  let highestUnit: string;
+  let value = -1;
+
+  ({ highestUnit, value } = timing(props.deadline));
+
   if (value === undefined) {
     return <p>LOADING...</p>;
   }
@@ -47,13 +61,10 @@ export default function Card(props: { data: Project; href: string }) {
       href={props.href}
     >
       <div className="">
-        <h2 className="font-bold">{props.data.name}</h2>
-        <p>Description: {props.data.description}</p>
-        {tasksLeft === 0 ? (
-          <p className="text-green-500 font-semibold">No More Tasks</p>
-        ) : (
-          <p className="text-orange-500 font-semibold">{tasksLeft} Tasks</p>
-        )}
+        <h2 className="font-bold">{props.name}</h2>
+        <p>Description: {props.description}</p>
+        
+        {props.children}
 
         {/* Display the highest non-zero unit of time */}
         {value <= 0 ? (
@@ -64,4 +75,32 @@ export default function Card(props: { data: Project; href: string }) {
       </div>
     </StyledLink>
   );
+}
+
+export function ProjectCard(props: { data: Project; href: string }){
+  const proj = props.data
+  let tasksLeft = props.data.tasks.length; // Change once Task Class is added
+  return <Card
+    deadline={proj.deadline}
+    name={proj.name}
+    description={proj.description}
+    href={props.href}>
+    {tasksLeft === 0 ? (
+      <p className="text-green-500 font-semibold">No More Tasks</p>
+    ) : (
+      <p className="text-orange-500 font-semibold">{tasksLeft} Tasks</p>
+    )}
+  </Card>;
+}
+
+export function TaskCard(props: { data: Task; href: string }) {
+  const task = props.data;
+  const clr = (task.priority===0)?"green":((task.priority==1)?"orange":"red");  
+  return <Card
+    deadline={task.dueDate}
+    name={task.title}
+    description={task.description}
+    href={props.href}>
+      <p className={`text-${{clr}}-500 font-semibold`}>{task.status}</p>
+    </Card>
 }
