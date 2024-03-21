@@ -9,6 +9,10 @@ const userLinks: Array<{
   {
     name: "Project",
     link: "/project",
+  }, 
+  {
+    name: "User Statistics",
+    link: "/userstatistics"
   }
 ];
 export default userLinks;

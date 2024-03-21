@@ -27,7 +27,7 @@ public class LoginController {
     ProjectController projectController;
 
     @CrossOrigin("http://localhost:3000")
-    @PostMapping("/login")
+    @PostMapping("/api/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> request) {
         System.out.println("LoginController.login() called");
         try {

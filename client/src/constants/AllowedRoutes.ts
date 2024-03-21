@@ -5,6 +5,6 @@ type AllowedRoutesType = {
 
 export const allowedRoutes: AllowedRoutesType = {
   userRole: {
-    pages: ["/home", "/project", "/projects"],
+    pages: ["/home", "/project", "/projects", "/userstatistics"],
   },
 };
