@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.workflow.server.ProjectRepository;
 import com.workflow.server.UserRepository;
 import com.workflow.server.model.User;
-import com.workflow.server.utils.commonResponse;
+import com.workflow.server.utils.CommonResponse;
 
 @RestController
 public class LoginController {
@@ -23,7 +23,6 @@ public class LoginController {
     @Autowired
     private UserRepository userRepo;
 
-    private commonResponse respond = new commonResponse();
 
     @CrossOrigin("http://localhost:3000")
     @PostMapping("/api/login")
@@ -34,7 +33,7 @@ public class LoginController {
             String password = request.get("password");
             if (email == null || password == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(respond.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing email or password"));
+                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing email or password"));
             }
 
             User data = CheckLogin(email);
@@ -50,19 +49,19 @@ public class LoginController {
                     user.put("username", data.getUsername());
 
                     return ResponseEntity.status(HttpStatus.OK)
-                            .body(respond.getSuccessResponse(HttpStatus.OK.value(), "Success", user));
+                            .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", user));
                 } else {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                            .body(respond.getErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Incorrect credentials"));
+                            .body(CommonResponse.getErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Incorrect credentials"));
                 }
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(respond.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
+                        .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
             }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(respond.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
+                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
         }
     }
 

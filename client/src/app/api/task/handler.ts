@@ -93,7 +93,7 @@ export async function AddTask(
   }
 }
 
-export async function AddAssignee(userId: string, taskId: string) {
+export async function assignCollaborator(userId: string, taskId: string) {
   try {
     const response = await axiosInstance.post(
       `${BACKEND_URL}/api/assignCollaborator`,
