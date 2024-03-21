@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { GetProjects } from "@/app/api/project/handler";
 import AddProject from "@/components/modals/addProjectModal";
 import AddButton from "@/components/atoms/AddButton";
+import { GetTasks } from "@/app/api/task/handler";
 
 function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -45,11 +46,35 @@ function Projects() {
       <div className="grid md:grid-cols-3 gap-x-3 gap-y-2 w-full">
         {projects &&
           projects.map((project, index) => (
-            <ProjectCard data={project} href={`/projects/${project._id}`} key={index}/>
+            <ProjectCardWithTasks project={project} key={index} />
           ))}
       </div>
     </div>
   );
+}
+
+interface ProjectCardWithTasksProps {
+  project: Project;
+}
+
+function ProjectCardWithTasks({ project }: ProjectCardWithTasksProps) {
+  const [tasksLeft, setTasksLeft] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await GetTasks(project._id);
+        const tasks = response.content;
+        setTasksLeft(tasks.length);
+      } catch (error) {
+        console.error(`Error fetching tasks for project ${project._id}:`, error);
+      }
+    };
+
+    fetchTasks();
+  }, [project._id]);
+
+  return <ProjectCard data={project} href={`/projects/${project._id}`} tasksLeft={tasksLeft} />;
 }
 
 export default Projects;

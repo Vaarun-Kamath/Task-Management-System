@@ -77,9 +77,9 @@ export default function Card(props: {
   );
 }
 
-export function ProjectCard(props: { data: Project; href: string }){
-  const proj = props.data
-  let tasksLeft = props.data.tasks.length; // Change once Task Class is added
+export function ProjectCard(props: { data: Project; href: string; tasksLeft: ReactNode}){
+  const proj = props.data;
+  let tasksLeft = props.tasksLeft;
   return <Card
     deadline={proj.deadline}
     name={proj.name}

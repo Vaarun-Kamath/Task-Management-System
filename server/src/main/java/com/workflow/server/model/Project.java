@@ -1,7 +1,6 @@
 package com.workflow.server.model;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,7 +16,6 @@ public class Project {
     private String timeline;
     private String createdBy;
     private Set<String> collaborators;
-    private Set<String> tasks;
     private String statistics;
 
     public Project() {
@@ -59,10 +57,6 @@ public class Project {
         return this.collaborators;
     }
 
-    public Set<String> getTasks() {
-        return this.tasks;
-    }
-
     public String getStatistics() {
         return this.statistics;
     }
@@ -97,10 +91,6 @@ public class Project {
         this.collaborators = collabs;
     }
 
-    public void setTasks(Set<String> tasks) {
-        this.tasks = tasks;
-    }
-
     public void setStatistics(String stats) {
         this.statistics = stats;
     }
@@ -116,7 +106,6 @@ public class Project {
                 ", timeline='" + timeline + '\'' +
                 ", created by='" + createdBy + '\'' +
                 ", collaborators='" + collaborators + '\'' +
-                ", tasks='" + tasks + '\'' +
                 ", statistics='" + statistics + '\'' +
                 '}';
     }
