@@ -8,14 +8,14 @@ function AddCollaboratorSection(props: { projectId: string }) {
   const [collaboratorAddError, setCollaboratorAddError] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
-  const handleAddCollaborator = async () => {
+  const handleAddCollaborator = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
     setLoading(true);
     ("use server");
     try {
       const res = await AddCollaborator(collaboratorUsername, props.projectId);
-
-      console.log("AddCollaborator: ", res);
-
       if (res.errorCode) {
         console.log("Error adding collaborator", res);
         setCollaboratorAddError(res.errorMessage);
@@ -32,38 +32,43 @@ function AddCollaboratorSection(props: { projectId: string }) {
     }
   };
   return (
-    <div className="flex flex-col flex-1 border p-5 gap-5">
+    <div className="flex flex-col flex-1 border p-5 gap-5 w-fit">
       <div>
         <h2 className="font-semibold">Add Collaborator</h2>
       </div>
-      <div className="flex gap-3">
-        <input
-          className="p-2 w-1/5 focus:ring-0 border-2 rounded-md transition-all duration-200 focus:border-gray-700"
-          type="text"
-          placeholder="Enter username"
-          onChange={(e) => setCollaboratorUsername(e.target.value)}
-          disabled={loading}
-        />
-        <button
-          onClick={handleAddCollaborator}
-          disabled={loading}
-          className={
-            "border-2 px-5 py-1 flex flex-row rounded-md justify-center items-center gap-3 hover:bg-gray-700 hover:text-white transition-all duration-200 " +
-            (loading ? "cursor-not-allowed bg-gray-500 select-none" : "")
-          }
+      <div className="flex flex-col gap-3 w-fit">
+        <form
+          className="flex flex-row gap-3 w-96"
+          onSubmit={handleAddCollaborator}
         >
-          <span>
-            <IoPersonAddSharp />
+          <input
+            className="p-2 focus:ring-0 w-full border-2 rounded-md transition-all duration-200 focus:border-gray-700"
+            type="text"
+            placeholder="Enter username"
+            onChange={(e) => setCollaboratorUsername(e.target.value)}
+            disabled={loading}
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className={
+              "border-2 px-5 py-1 flex-1 flex flex-row rounded-md justify-center items-center gap-3 hover:bg-gray-700 hover:text-white transition-all duration-200 " +
+              (loading ? "cursor-not-allowed bg-gray-500 select-none" : "")
+            }
+          >
+            <span>
+              <IoPersonAddSharp />
+            </span>
+            Add
+          </button>
+        </form>
+        {collaboratorAddError != "" && (
+          <span className="transition-all duration-200 bg-red-500 text-sm rounded-sm text-white font-medium flex items-center px-1.5 py-1">
+            <FaExclamationCircle className="mr-2 animate-pulse" />{" "}
+            {collaboratorAddError}
           </span>
-          Add
-        </button>
+        )}
       </div>
-      {collaboratorAddError != "" && (
-        <span className="transition-all duration-200 bg-red-500 w-full text-sm rounded-sm text-white font-medium flex items-center px-1.5 py-1">
-          <FaExclamationCircle className="mr-2 animate-pulse" />{" "}
-          {collaboratorAddError}
-        </span>
-      )}
     </div>
   );
 }
