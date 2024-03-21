@@ -2,14 +2,11 @@ package com.workflow.server.controller;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mongodb.lang.NonNull;
 import com.workflow.server.ProjectRepository;
 import com.workflow.server.model.Project;
-import com.workflow.server.utils.commonResponse;
+import com.workflow.server.utils.CommonResponse;
 
 @RestController
 public class ProjectController {
@@ -30,18 +26,17 @@ public class ProjectController {
     @Autowired
     private ProjectRepository projrepo;
 
-    private commonResponse respond = new commonResponse();
 
     @GetMapping("/api/projects")
     @CrossOrigin("http://localhost:3000")
     public ResponseEntity<Map<String, Object>> getAllProjects(@RequestParam String user_id) {
         if (user_id == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(respond.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "You Must Login First"));
+                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "You Must Login First"));
         }
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(respond.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projrepo.findByCreatedBy(user_id)));
+                .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projrepo.findByCreatedBy(user_id)));
     }
 
     @GetMapping("/api/projectById")
@@ -50,18 +45,18 @@ public class ProjectController {
 
         if (project_id == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(respond.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Project ID"));
+                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Project ID"));
         }
 
         Optional<Project> projectOptional = projrepo.findById(project_id);
 
         if (projectOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(respond.getErrorResponse(HttpStatus.NOT_FOUND.value(), "Project not found"));
+                    .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "Project not found"));
         }
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(respond.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projectOptional.get()));
+                .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projectOptional.get()));
     }
 
     // Post mappings
@@ -77,18 +72,18 @@ public class ProjectController {
 
             if (name == null || createdBy == null || createdOn == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(respond.getErrorResponse(HttpStatus.BAD_REQUEST.value(),
+                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(),
                                 "Missing name, createdOn or createdBy"));
             }
 
             projrepo.insert(newProj);
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(respond.getSuccessResponse(HttpStatus.OK.value(), "Success", newProj));
+                    .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", newProj));
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(respond.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
+                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
         }
     }
 
