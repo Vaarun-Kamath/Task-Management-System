@@ -9,7 +9,7 @@ interface baseModalProps
 
 const BaseModal = (props: baseModalProps) => {
   return (
-    <div className="transition-all duration-200 fixed top-1/2 left-3/4 transform -translate-x-3/4 -translate-y-1/2 bg-white rounded-md shadow-2xl w-9/12 overflow-hidden z-50">
+    <div className="transition-all duration-200 lg:-translate-x-1/2 fixed transform bg-white rounded-md shadow-2xl lg:w-1/3 md:w-2/3 w-full overflow-hidden z-50">
       <div className="px-4 py-3 bg-slate-800 rounded-t-md flex justify-between items-center">
         <div>
           <h2 className="text-lg font-semibold text-white">
