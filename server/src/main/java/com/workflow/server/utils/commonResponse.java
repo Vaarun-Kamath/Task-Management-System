@@ -15,7 +15,8 @@ public class commonResponse {
     public Map<String, Object> getErrorResponse(int status, String message) {
         Map<String, Object> response = new HashMap<>();
         response.put("status", status);
-        response.put("error", message);
+        response.put("errorCode", status);
+        response.put("errorMessage", message);
         return response;
     }
 }

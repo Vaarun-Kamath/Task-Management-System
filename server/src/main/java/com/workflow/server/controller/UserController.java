@@ -40,17 +40,21 @@ public class UserController {
 
             User data = CheckUserCollaboration(username);
 
-            if (data.get_id() != null) {
-                boolean res = projectController.addCollaborator(projectId, data.get_id());
-                if (res) {
+            System.out.println();
+
+            if (data != null && data.get_id() != null) {
+                HashMap<String, Object> res = projectController.addCollaborator(projectId, data.get_id());
+                if (res.get("status").equals(200)) {
                     return ResponseEntity.status(HttpStatus.OK)
-                            .body(respond.getSuccessResponse(HttpStatus.OK.value(), "Success", new HashMap<>()));
+                            .body(respond.getSuccessResponse(HttpStatus.OK.value(), "Success", res));
                 } else {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body(respond.getErrorResponse(HttpStatus.BAD_REQUEST.value(),
-                                    "User already collaborator or Project does not exist"));
+                                    (String) res.get("message")));
                 }
             } else {
+                System.out.println("\n\n\n" + "RESPONSE:" + ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(respond.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found")) + "\n\n\n");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(respond.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
             }
@@ -63,13 +67,6 @@ public class UserController {
     }
 
     private User CheckUserCollaboration(String username) {
-        User user = userRepo.findByUsername(username);
-        System.out.println(user);
-        // if (user != null) {
-        // user.set_id("123");
-        // user.setEmail("useremail@gmail.com");
-        // user.setUsername("user");
-        // }
-        return user;
+        return userRepo.findByUsername(username);
     }
 }

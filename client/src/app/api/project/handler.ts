@@ -100,10 +100,12 @@ export async function AddCollaborator(username: string, projectId: string) {
         projectId: projectId,
       }
     );
+    console.log("GetProjectById_response:: ", response);
     const { data } = response;
     return data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {
+      console.log("GetProjectById_error:: ", error);
       const { status, errorCode, errorMessage } = error.response.data;
       return { status, errorCode, errorMessage };
     } else {

@@ -8,11 +8,11 @@ const userLinks: Array<{
   },
   {
     name: "Project",
-    link: "/project",
-  }, 
+    link: "/projects",
+  },
   {
     name: "User Statistics",
-    link: "/userstatistics"
-  }
+    link: "/userstatistics",
+  },
 ];
 export default userLinks;

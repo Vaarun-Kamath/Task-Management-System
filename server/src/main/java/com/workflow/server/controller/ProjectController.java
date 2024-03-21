@@ -1,6 +1,7 @@
 package com.workflow.server.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -52,8 +53,15 @@ public class ProjectController {
                     .body(respond.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Project ID"));
         }
 
+        Optional<Project> projectOptional = projrepo.findById(project_id);
+
+        if (projectOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(respond.getErrorResponse(HttpStatus.NOT_FOUND.value(), "Project not found"));
+        }
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(respond.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projrepo.findById(project_id)));
+                .body(respond.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projectOptional.get()));
     }
 
     // Post mappings
@@ -84,36 +92,48 @@ public class ProjectController {
         }
     }
 
+    private HashMap<String, Object> getCollabErrorResponse(int value, String message) {
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("status", value);
+        response.put("message", message);
+        return response;
+    }
+
     // Controller - Controller communication functions
-    public boolean addCollaborator(String proj_id, String collab_id) {
+    public HashMap<String, Object> addCollaborator(String proj_id, String collab_id) {
         try {
             if (proj_id == null || collab_id == null)
-                return false;
+                return getCollabErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing project or collaborator ID");
             System.out.println(proj_id + " : " + collab_id);
 
             Optional<Project> projectOptional = projrepo.findById(proj_id);
 
             if (projectOptional.isEmpty()) {
-                System.out.println("Project not found.");
-                return false;
+                return getCollabErrorResponse(HttpStatus.NOT_FOUND.value(), "Project not found");
             }
 
             // Change once Task class is built
             Project project = projectOptional.get();
             Set<String> collaborators = project.getCollaborators();
 
-            System.out.println("project: " + project);
+            if (project.getCreatedBy().equals(collab_id)) {
+                return getCollabErrorResponse(HttpStatus.BAD_REQUEST.value(), "User is the creator of the project");
+            }
+
+            if (collaborators.contains(collab_id)) {
+                return getCollabErrorResponse(HttpStatus.BAD_REQUEST.value(), "User already a collaborator");
+            }
 
             collaborators.add(collab_id);
             project.setCollaborators(collaborators);
             projrepo.save(project);
 
-            return true;
+            return getCollabErrorResponse(HttpStatus.OK.value(), "Success");
 
         } catch (Exception e) {
             System.out.println("Internal server error");
             System.out.println(e);
-            return false;
+            return getCollabErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error");
         }
     }
 }

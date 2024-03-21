@@ -1,9 +1,11 @@
 import { AddCollaborator } from "@/app/api/project/handler";
 import React, { useState } from "react";
+import { FaExclamationCircle } from "react-icons/fa";
 import { IoPersonAddSharp } from "react-icons/io5";
 
 function AddCollaboratorSection(props: { projectId: string }) {
-  const [collaboratorUsername, setCollaboratorUsername] = useState("");
+  const [collaboratorUsername, setCollaboratorUsername] = useState<string>("");
+  const [collaboratorAddError, setCollaboratorAddError] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
   const handleAddCollaborator = async () => {
@@ -12,13 +14,19 @@ function AddCollaboratorSection(props: { projectId: string }) {
     try {
       const res = await AddCollaborator(collaboratorUsername, props.projectId);
 
+      console.log("AddCollaborator: ", res);
+
       if (res.errorCode) {
         console.log("Error adding collaborator", res);
+        setCollaboratorAddError(res.errorMessage);
+        setTimeout(() => {
+          setCollaboratorAddError("");
+        }, 3000);
       } else if (res.status === 200) {
         window.location.reload();
       }
     } catch (err) {
-      console.log("Please try again after some time");
+      console.log("Please try again after some time [INTERNAL SERVER ERROR]");
     } finally {
       setLoading(false);
     }
@@ -50,6 +58,12 @@ function AddCollaboratorSection(props: { projectId: string }) {
           Add
         </button>
       </div>
+      {collaboratorAddError != "" && (
+        <span className="transition-all duration-200 bg-red-500 w-full text-sm rounded-sm text-white font-medium flex items-center px-1.5 py-1">
+          <FaExclamationCircle className="mr-2 animate-pulse" />{" "}
+          {collaboratorAddError}
+        </span>
+      )}
     </div>
   );
 }
