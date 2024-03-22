@@ -89,7 +89,6 @@ export default function ProjectDetails({ params }: { params: { "project-details"
           <p>name: {project?.name}</p>
           <p>description: {project?.description}</p>
           <p>deadline: {project?.deadline}</p>
-          <p>createdBy: {project?.createdBy}</p>
           <p>createdOn: {project?.createdOn}</p>
           <p>
             collaborators:{" "}

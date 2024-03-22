@@ -8,7 +8,7 @@ export default async function ProjectLayout({
 }) {
   return (
     <section className="flex w-full flex-wrap flex-col">
-      <PageHeader title="Projects" />
+      
       {children}
     </section>
   );

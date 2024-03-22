@@ -9,6 +9,7 @@ import { GetProjects } from "@/app/api/project/handler";
 import AddProject from "@/components/modals/addProjectModal";
 import AddButton from "@/components/atoms/AddButton";
 import { GetTasks } from "@/app/api/task/handler";
+import PageHeader from "@/components/atoms/PageHeader";
 
 function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -38,6 +39,8 @@ function Projects() {
   }, [session, user?.user_id]);
 
   return (
+    <>
+    <PageHeader title="Projects" />
     <div className="flex flex-col px-2 mb-4 gap-5 items-center">
       <div className="w-full">
         <AddButton onclick={() => setShowModal(true)} >Add Project</AddButton>
@@ -50,6 +53,7 @@ function Projects() {
           ))}
       </div>
     </div>
+    </>
   );
 }
 
