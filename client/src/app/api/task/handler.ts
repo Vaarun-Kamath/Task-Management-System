@@ -1,5 +1,5 @@
 import { isAxiosError } from "axios";
-import axiosInstance from "@/utils/axiosInstance";
+import axiosInstance, { handleAxiosError } from "@/utils/axiosInstance";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -13,17 +13,12 @@ export async function GetTasks(projectId: string | null | undefined) {
         console.log(data);
         return data;
     } catch (error) {
-        if (isAxiosError(error) && error.response) {
-            const { status, errorCode, errorMessage } = error.response.data;
-            return { status, errorCode, errorMessage };
-        } else {
-            console.error(error);
-            return {
-                status: 500,
-                errorCode: "ERROR_GETTING_TASKS",
-                errorMessage: "Please try again later.",
-            };
-        }
+      return handleAxiosError(
+        error,
+        500,
+        "ERROR_GETTING_TASKS",
+        "Please try again later.",
+      );
     }
 }
 
@@ -36,17 +31,12 @@ export async function GetTaskById(taskId: string) {
     const { data } = response;
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const { status, errorCode, errorMessage } = error.response.data;
-      return { status, errorCode, errorMessage };
-    } else {
-      console.error(error);
-      return {
-        status: 500,
-        errorCode: "ERROR_GETTING_TASK",
-        errorMessage: "Please try again later.",
-      };
-    }
+    return handleAxiosError(
+      error,
+      500,
+      "ERROR_GETTING_TASK",
+      "Please try again later.",
+    );
   }
 }
 
@@ -61,7 +51,6 @@ export async function AddTask(
 ) {
   const today = new Date();
   try {
-    // console.log(project);
     const response = await axiosInstance.post(
       `${BACKEND_URL}/api/addTask`,
       {
@@ -79,17 +68,12 @@ export async function AddTask(
     const { data } = response;
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const { status, errorCode, errorMessage } = error.response.data;
-      return { status, errorCode, errorMessage };
-    } else {
-      console.error(error);
-      return {
-        status: 500,
-        errorCode: "ERROR_CREATING_TASKS",
-        errorMessage: "Please try again later.",
-      };
-    }
+    return handleAxiosError(
+      error,
+      500,
+      "ERROR_CREATING_TASKS",
+      "Please try again later.",
+    );
   }
 }
 
@@ -105,16 +89,11 @@ export async function assignCollaborator(userId: string, taskId: string) {
     const { data } = response;
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const { status, errorCode, errorMessage } = error.response.data;
-      return { status, errorCode, errorMessage };
-    } else {
-      console.error(error);
-      return {
-        status: 500,
-        errorCode: "ASIGNEE_API_ERROR",
-        errorMessage: "Please try again later.",
-      };
-    }
+    return handleAxiosError(
+      error,
+      500,
+      "ASIGNEE_API_ERROR",
+      "Please try again later."
+    );
   }
 }

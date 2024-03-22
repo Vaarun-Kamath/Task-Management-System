@@ -1,5 +1,5 @@
 import { isAxiosError } from "axios";
-import axiosInstance from "@/utils/axiosInstance";
+import axiosInstance, { handleAxiosError } from "@/utils/axiosInstance";
 import { Project } from "@/types/project";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -15,17 +15,12 @@ export async function GetProjects(user_id: string | null | undefined) {
     console.log(data);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const { status, errorCode, errorMessage } = error.response.data;
-      return { status, errorCode, errorMessage };
-    } else {
-      console.error(error);
-      return {
-        status: 500,
-        errorCode: "ERROR_GETTING_PROJECTS",
-        errorMessage: "Please try again later.",
-      };
-    }
+    return handleAxiosError(
+      error, 
+      500, 
+      "ERROR_GETTING_PROJECTS", 
+      "Please try again later."
+    );
   }
 }
 
@@ -39,17 +34,12 @@ export async function GetProjectById(project_id: string) {
     const { data } = response;
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const { status, errorCode, errorMessage } = error.response.data;
-      return { status, errorCode, errorMessage };
-    } else {
-      console.error(error);
-      return {
-        status: 500,
-        errorCode: "ERROR_GETTING_PROJECTS",
-        errorMessage: "Please try again later.",
-      };
-    }
+    return handleAxiosError(
+      error,
+      500,
+      "ERROR_GETTING_PROJECT",
+      "Please try again later."
+    );
   }
 }
 
@@ -77,17 +67,11 @@ export async function AddProject(
     const { data } = response;
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const { status, errorCode, errorMessage } = error.response.data;
-      return { status, errorCode, errorMessage };
-    } else {
-      console.error(error);
-      return {
-        status: 500,
-        errorCode: "ERROR_CREATING_PROJECTS",
-        errorMessage: "Please try again later.",
-      };
-    }
+    return handleAxiosError(
+      error,
+      500,
+      "ERROR_CREATING_PROJECT",
+      "Please try again later.");
   }
 }
 
@@ -104,17 +88,11 @@ export async function AddCollaborator(username: string, projectId: string) {
     const { data } = response;
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      console.log("GetProjectById_error:: ", error);
-      const { status, errorCode, errorMessage } = error.response.data;
-      return { status, errorCode, errorMessage };
-    } else {
-      console.error(error);
-      return {
-        status: 500,
-        errorCode: "COLLABORATOR_ADDITION_API_ERROR",
-        errorMessage: "Please try again later.",
-      };
-    }
+    return handleAxiosError(
+      error,
+      500,
+      "COLLABORATOR_ADDITION_API_ERROR",
+      "Please try again later."
+    );
   }
 }

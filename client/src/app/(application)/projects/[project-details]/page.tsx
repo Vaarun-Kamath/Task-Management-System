@@ -12,10 +12,13 @@ import AddButton from "@/components/atoms/AddButton";
 import { Project } from "@/types/project";
 import { Task } from "@/types/task";
 import { TaskCard } from "@/components/atoms/Card";
+import { GetUserById } from "@/app/api/user/handler";
+import { UserDetails } from "@/types/user";
 
 export default function ProjectDetails({ params }: { params: { "project-details": string } }) {
   const { "project-details": projectId } = params;
   const [project, setProject] = useState<Project | null>(null);
+  const [creator, setCreator] = useState<UserDetails | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState(false);
@@ -27,6 +30,7 @@ export default function ProjectDetails({ params }: { params: { "project-details"
       redirect(`/`);
     },
   });
+  const user = session?.user;
 
   useLayoutEffect(() => {
     const fetchProjectData = async () => {
@@ -39,6 +43,13 @@ export default function ProjectDetails({ params }: { params: { "project-details"
         } else {
           setLoading(false);
           setProject(response.content);
+
+          try{//getting the creator of the project
+            const respCreator = await GetUserById(response.content.createdBy);
+            if (respCreator.errorCode) { console.log("Error getting projectCreator", respCreator) }
+            else { setCreator(respCreator.content) }
+          } catch (error) { console.error("Error fetching data[User]:", error) }
+
         }
       } catch (error) {
         console.error("Error fetching data[Project]:", error);
@@ -67,6 +78,7 @@ export default function ProjectDetails({ params }: { params: { "project-details"
 
   return (
     <>
+      <PageHeader title={(project?.name || "Project") + (creator?" created by "+ creator.username:"")} />
       {loading ? null : (
         <div className="flex flex-col px-2 mb-4 gap-5">
           <AddCollaboratorSection projectId={projectId} />
