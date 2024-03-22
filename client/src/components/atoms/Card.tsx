@@ -93,14 +93,14 @@ export function ProjectCard(props: { data: Project; href: string; tasksLeft: Rea
   </Card>;
 }
 
-export function TaskCard(props: { data: Task; href: string }) {
+export function TaskCard(props: { data: Task }) {
   const task = props.data;
   const clr = (task.priority===0)?"green":((task.priority==1)?"orange":"red");  
   return <Card
     deadline={task.dueDate}
     name={task.title}
     description={task.description}
-    href={props.href}>
+    href={"#"}>
       <p className={`text-${clr}-500 font-semibold`}>{task.status}</p>
     </Card>
 }

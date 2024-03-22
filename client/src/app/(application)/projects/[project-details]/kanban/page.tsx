@@ -101,7 +101,7 @@ export default function ProjectDetails({ params }: { params: { "project-details"
           <p>statistics: {project?.statistics}</p>
           <div className="grid md:grid-cols-3 gap-x-3 gap-y-2 w-full">
             {tasks && tasks.map((task, index) => (
-              <TaskCard data={task} href={`/tasks/${task._id}`} key={index}/>
+              <TaskCard data={task} key={index}/>
             ))}
           </div>
         </div>

@@ -78,7 +78,7 @@ function ProjectCardWithTasks({ project }: ProjectCardWithTasksProps) {
     fetchTasks();
   }, [project._id]);
 
-  return <ProjectCard data={project} href={`/projects/${project._id}`} tasksLeft={tasksLeft} />;
+  return <ProjectCard data={project} href={`/projects/${project._id}/kanban`} tasksLeft={tasksLeft} />;
 }
 
 export default Projects;
