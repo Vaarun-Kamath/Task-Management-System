@@ -22,6 +22,44 @@ export async function GetTasks(projectId: string | null | undefined) {
     }
 }
 
+export async function GetTasksBreakdown(projectId: string | null | undefined) {
+  try {
+      const response = await axiosInstance.get(
+        `${BACKEND_URL}/api/tasksbreakdown`,
+        { params: { projectId: projectId }}
+      );
+      const { data } = response;
+      console.log(data);
+      return data;
+  } catch (error) {
+    return handleAxiosError(
+      error,
+      500,
+      "ERROR_GETTING_TASKS_BREAKDOWN",
+      "Please try again later.",
+    );
+  }
+}
+
+export async function GetTasksTimeline(projectId: string | null | undefined) {
+  try {
+      const response = await axiosInstance.get(
+        `${BACKEND_URL}/api/taskstimeline`,
+        { params: { projectId: projectId }}
+      );
+      const { data } = response;
+      console.log(data);
+      return data;
+  } catch (error) {
+    return handleAxiosError(
+      error,
+      500,
+      "ERROR_GETTING_TASKS_TIMELINE",
+      "Please try again later.",
+    );
+  }
+}
+
 export async function GetTaskById(taskId: string) {
   try {
     const response = await axiosInstance.get(

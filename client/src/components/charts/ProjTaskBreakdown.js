@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from "react"
 import { Chart } from "chart.js/auto"
 import { GetTasksBreakdown } from "@/app/api/task/handler"
 
-export default function BarChart(props){
+export default function ProjTaskBreakdown(props){
     const chartRef = useRef(null)
     const [chartData, setChartData] = useState([])
 
@@ -32,24 +32,24 @@ export default function BarChart(props){
             const context = chartRef.current.getContext("2d")
 
             const newChart = new Chart(context, {
-                type: "bar",
+                type: "pie",
                 data: {
                     labels: chartData.labels,
-                    // ["Pending Tasks", "Completed Tasks", "Tasks beyond deadline"],
+                    // ["Your Projects", "Collaborated Projects"],
                     datasets: [
                         {
-                            label: "Tasks status",
+                            // label: "Tasks completed per month this year",
                             data: chartData.values,
-                            // [12, 16, 5],
+                            // [5, 3],
                             backgroundColor: [
-                                "rgb(255, 99, 132, 0.3)",
-                                "rgb(255, 159, 64, 0.3)",
-                                "rgb(104, 10, 86, 0.3)",
+                                "rgb(5, 99, 255, 0.7)",
+                                "rgb(23, 203, 71, 0.7)",
+                                "rgb(255, 36, 29, 0.7)",
                             ],
                             borderColor: [
-                                "rgb(255, 99, 132, 0.3)",
-                                "rgb(255, 159, 64, 0.3)",
-                                "rgb(255, 205, 86, 0.3)",
+                                "rgb(5, 99, 255, 0.7)",
+                                "rgb(23, 203, 71, 0.7)",
+                                "rgb(255, 36, 29, 0.7)",
                             ],
                             borderWidth: 1,
                         }
@@ -57,14 +57,6 @@ export default function BarChart(props){
                 },
                 options: {
                     responsive: true,
-                    scales: {
-                        x: {
-                            type: "category"
-                        },
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
                 }
             })
             chartRef.current.chart = newChart
@@ -72,7 +64,7 @@ export default function BarChart(props){
     }, [chartData])
 
     return (
-        <div style={{position: "relative", width: "1000px", height: "500px"}}>
+        <div style={{position: "relative", width: "500px", height: "500px"}}>
             <canvas ref={chartRef}></canvas>
         </div>
     );

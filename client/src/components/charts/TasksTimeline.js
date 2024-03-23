@@ -1,9 +1,27 @@
 'use client'
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import { Chart } from "chart.js/auto"
+import { GetTasksTimeline } from "@/app/api/task/handler"
 
-export default function LineChart(){
+export default function TasksTimeline(props){
     const chartRef = useRef(null)
+    const [chartData, setChartData] = useState([])
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            
+              const projectId = props.projectId;
+              const response = await GetTasksTimeline(projectId);
+              setChartData(response.content);
+            
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          } 
+        };
+    
+        fetchData();
+      }, []);
 
     useEffect(()=>{
         if(chartRef.current){
@@ -16,11 +34,13 @@ export default function LineChart(){
             const newChart = new Chart(context, {
                 type: "line",
                 data: {
-                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    labels: chartData.labels,
+                    // ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                     datasets: [
                         {
                             label: "Tasks completed",
-                            data: [4, 9, 3],
+                            data: chartData.values,
+                            // [4, 9, 3],
                             backgroundColor: [
                                 "rgb(10, 10, 132, 0.9)",
                             ],
@@ -45,7 +65,7 @@ export default function LineChart(){
             })
             chartRef.current.chart = newChart
         }
-    }, [])
+    }, [chartData])
 
     return (
         <div style={{position: "relative", width: "1000px", height: "500px"}}>

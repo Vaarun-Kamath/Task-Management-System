@@ -12,6 +12,7 @@
     "axios": "^1.6.7",
     "chart.js": "^4.4.2",
     "chartjs": "^0.3.24",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "clsx": "^2.1.0",
     "jsonwebtoken": "^9.0.2",
     "next": "14.1.1",

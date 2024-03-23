@@ -1,7 +1,7 @@
 import React from 'react'
 import BarChart from '@/components/charts/Barchart'
-import PieChart from '@/components/charts/PieChart'
-import LineChart from '@/components/charts/LineChart'
+import ProjTaskBreakdown from '@/components/charts/ProjTaskBreakdown'
+import TasksTimeline from '@/components/charts/TasksTimeline'
 
 const UserStatistics = () => {
   return (
@@ -9,11 +9,11 @@ const UserStatistics = () => {
         <h1>
             Tasks Completion Insights
         </h1>
-        <LineChart/>
+        {/* <TasksTimeline projectId = "65fc000186af725e003b0042"/>
         <h1>Tasks Insights</h1>
-        <BarChart/>
+        <BarChart projectId = "65fc000186af725e003b0042" />
         <h1>Projects Insights</h1>
-        <PieChart/>
+        <ProjTaskBreakdown projectId = "65fc000186af725e003b0042"/> */}
     </div>
     
   )
