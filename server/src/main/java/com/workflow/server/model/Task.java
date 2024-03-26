@@ -16,7 +16,7 @@ public class Task {
     private String status;
     private String createdBy;
     private String projectId;
-    private Set<String> assignees;
+    private String assigneeId;
 
     public Task() {}
 
@@ -46,8 +46,8 @@ public class Task {
         return createdBy;
     }
 
-    public Set<String> getAssignees() {
-        return assignees;
+    public Set<String> getAssigneeId() {
+        return assigneeId;
     }
 
     public String getProjectId(){
@@ -80,8 +80,8 @@ public class Task {
         createdBy = creatorId;
     }
 
-    public void setCollaborators(Set<String> assignees) {
-        this.assignees = assignees;
+    public void setCollaborators(String assigneeId) {
+        this.assigneeId = assigneeId;
     }
 
     public void setPriority(int newPriority){
@@ -100,7 +100,7 @@ public class Task {
                 ", dueDate=" + dueDate +
                 ", createdOn=" + createdOn +
                 ", created by='" + createdBy + '\'' +
-                ", assignees='" + assignees + '\'' +
+                ", assigneeId='" + assigneeId + '\'' +
                 '}';
     }
 }
