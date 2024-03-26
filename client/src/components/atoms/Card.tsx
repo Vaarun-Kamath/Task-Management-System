@@ -3,6 +3,7 @@ import StyledLink from "./StyledLink";
 import { Task } from "@/types/task";
 import { ReactNode } from "react";
 
+
 function timing(deadline: String){
   let highestUnit = "seconds";
   let value = -1;
@@ -57,22 +58,18 @@ export default function Card(props: {
 
   return (
     <StyledLink
-      className="border-2 hover:bg-gray-700 hover:text-white p-5 transition-all duration-200 select-none"
+      className="w-full border-2 hover:bg-gray-700 hover:text-white p-5 transition-all duration-200 select-none rounded-md"
       href={props.href}
     >
-      <div className="">
-        <h2 className="font-bold">{props.name}</h2>
-        <p>Description: {props.description}</p>
+       {/* <div> */}
+        <h2 className="font-bold" onMouseOver={()=>{}}>{props.name}</h2>
+        <cite id="desc">Description: {props.description}</cite>
 
         {props.children}
 
         {/* Display the highest non-zero unit of time */}
-        {value <= 0 ? (
-          <p className="text-red-500 font-semibold">DEADLINE OVER</p>
-        ) : (
-          <p>{value} {highestUnit} left</p>
-        )}
-      </div>
+        {value <= 0 ? (<p className="text-red-500 font-semibold">DEADLINE OVER</p>) : ( <p>{value} {highestUnit} left</p> )}
+      {/* </div> */}
     </StyledLink>
   );
 }

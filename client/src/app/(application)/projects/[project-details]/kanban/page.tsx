@@ -14,6 +14,8 @@ import { Task } from "@/types/task";
 import { TaskCard } from "@/components/atoms/Card";
 import { GetUserById } from "@/app/api/user/handler";
 import { UserDetails } from "@/types/user";
+import Lane from "@/components/atoms/Lane";
+import STATUSES from "@/constants/TaskStatus";
 
 export default function ProjectDetails({ params }: { params: { "project-details": string } }) {
   const { "project-details": projectId } = params;
@@ -78,30 +80,27 @@ export default function ProjectDetails({ params }: { params: { "project-details"
 
   return (
     <>
-      <PageHeader title={(project?.name || "Project") + (creator?" created by "+ creator.username:"")} />
+      <PageHeader
+        title={(project?.name || "Project") + (creator?" created by "+ creator.username:"")} 
+        tooltip={project?.description}/>
       {loading ? null : (
-        <div className="flex flex-col px-2 mb-4 gap-5">
+        <div className=" z-50 flex flex-col px-2 mb-4 gap-5 w-full items-center">
           <AddCollaboratorSection projectId={projectId} />
           {showModal && <AddTask setShowModal={setShowModal} projectId={projectId} />}
-          <div className="w-half">
+          <div className="w-full">
             <AddButton onclick={()=>setShowModal(true)} >Add Task</ AddButton>
           </div>
-          <p>name: {project?.name}</p>
-          <p>description: {project?.description}</p>
-          <p>deadline: {project?.deadline}</p>
-          <p>createdOn: {project?.createdOn}</p>
-          <p>
-            collaborators:{" "}
-            {project?.collaborators.map((val, index) => (
-              <p key={index}>{val}</p>
-            ))}
-          </p>
-          <p>backlog: {project?.backlog}</p>
-          <p>timeline: {project?.timeline}</p>
-          <p>statistics: {project?.statistics}</p>
-          <div className="grid md:grid-cols-3 gap-x-3 gap-y-2 w-full">
-            {tasks && tasks.map((task, index) => (
-              <TaskCard data={task} key={index}/>
+          {/* <p> collaborators:{" "}
+          {project?.collaborators.map((val, index) => (<p key={index}>{val}</p>))}
+          </p> */}
+          <div className="grid md:grid-cols-3 gap-x-1 w-full">
+            {STATUSES.map((status,stat_index)=>(
+              <Lane title={status} key={stat_index}>
+              {tasks && tasks
+              .filter(task => task.status === status)
+              .sort((taskA, taskB) => taskA.priority - taskB.priority)
+              .map((task, index) => (<TaskCard data={task} key={index}/>))}
+            </Lane>
             ))}
           </div>
         </div>

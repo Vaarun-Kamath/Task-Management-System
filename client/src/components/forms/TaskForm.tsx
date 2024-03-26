@@ -6,14 +6,16 @@ import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { AddTask } from "@/app/api/task/handler";
 import StyledInput from "../atoms/StyledInput";
+import StyledOption from "../atoms/StyledOption";
 import SubmitButton from "../atoms/SubmitButton";
+import STATUSES from "@/constants/TaskStatus";
 
 type Props = { callbackUrl?: string; projectId: string};
 
 export default function TaskForm(props: Props) {
   const [taskError, setTaskError] = useState<null | string>(null);
   const [loading, setLoading] = useState(false);
-
+  const [selectedStatus, setSelectedValue] = useState('TODO');
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
@@ -54,17 +56,21 @@ export default function TaskForm(props: Props) {
     const title = formData.get("title") || "";
     const description = formData.get("description") || "";
     const dueDate = formData.get("dueDate") || "";
+    const status = formData.get("status") || "TODO";
+    const priority = formData.get("priority") || "0";
 
     try {
       if (!validateInputs(title, dueDate)) return;
-      const addedProject = await AddTask(
+      const addedTask = await AddTask(
         title.toString(),
         description.toString(),
         dueDate.toString(),
         session?.user.user_id,
-        props.projectId.toString()
+        props.projectId.toString(),
+        status.toString(),
+        parseInt(priority.toString())
       );
-      console.log("New Task Created", addedProject);
+      console.log("New Task Created", addedTask);
       window.location.reload();
     } catch (err) {
       errorHandler("Error creating task.");
@@ -77,24 +83,31 @@ export default function TaskForm(props: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <StyledInput
-        className={inputClsName}
+      <StyledInput className={inputClsName}
         name="title" type="text"
         placeholder="Task title"
         required={true}
       />
-      <StyledInput
-        className={inputClsName}
+      <StyledInput className={inputClsName}
         name="description"
         type="text"
-        placeholder="Project Description"
+        placeholder="Task Description"
         required={true}
       />
-      <StyledInput
-        className={inputClsName}
+      <StyledInput className={inputClsName}
         name="dueDate"
         type="date"
         required={true}
+      />
+      <StyledInput className={inputClsName}
+        name="priority"
+        type="number"
+        pattern="[0-9]+"
+      />
+      <StyledOption className={inputClsName}
+        name="status"
+        options={STATUSES}
+        onChange={e=>setSelectedValue(e.target.value)}
       />
 
       {taskError && (
