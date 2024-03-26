@@ -43,11 +43,13 @@ export default function ProjTaskBreakdown(props){
                             // [5, 3],
                             backgroundColor: [
                                 "rgb(5, 99, 255, 0.7)",
+                                "rgb(255, 202, 0, 0.7)",
                                 "rgb(23, 203, 71, 0.7)",
                                 "rgb(255, 36, 29, 0.7)",
                             ],
                             borderColor: [
                                 "rgb(5, 99, 255, 0.7)",
+                                "rgb(255, 202, 0, 0.7)",
                                 "rgb(23, 203, 71, 0.7)",
                                 "rgb(255, 36, 29, 0.7)",
                             ],

@@ -48,26 +48,29 @@ public class StatisticsController {
         // System.out.println("Tasks: "+ tasks);
        
         HashMap<String, Object> resobj = new HashMap<>(); 
+        int todo = 0;
         int pending = 0;
         int completed = 0;
         int missed = 0;
         Date today = new Date();
         for (Task i: tasks){
-            
-            if((i.getStatus()).equals("TODO")){
-                if(today.before(i.getDueDate())){
-                    pending++;
-                }
-                else{
-                    missed++;
-                }
+            if((i.getStatus()).equals("COMPLETED")){
+              completed++;
             }
-            else if((i.getStatus()).equals("COMPLETED")){
-                completed++;
+            else {
+              if((i.getDueDate()).before(today)){
+                missed++;
+              }
+              else if((i.getStatus()).equals("TODO")){
+                todo++;
+              }
+              else if((i.getStatus()).equals("IN-PROGRESS")){
+                pending++;
+              }
             }
         }
-        resobj.put("labels", Arrays.asList("PENDING", "COMPLETED", "MISSED"));
-        resobj.put("values", Arrays.asList(pending, completed, missed));
+        resobj.put("labels", Arrays.asList("TODO","IN PROGRESS", "COMPLETED", "MISSED"));
+        resobj.put("values", Arrays.asList(todo, pending, completed, missed));
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", resobj));
