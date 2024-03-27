@@ -1,35 +1,29 @@
-import { useState } from "react";
-import AddButton from "./AddButton";
-import BaseModal from "../modals/baseModal";
+import { Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState } from "react";
 
-export default function ContextMenu(props: {position: {x:number, y:number}, onBlur:any}) {
+
+export default function ContextMenu(props: {
+  position: {x:number, y:number},
+  onBlur:any
+  children: ReactNode
+}) {
     const style: React.CSSProperties = {
-      position: 'absolute',
       top: props.position.y,
       left: props.position.x,
-      background: 'white',
-      border: '1px solid #ccc',
-      boxShadow: '2px 2px 5px rgba(0,0,0,0.2)',
-      padding: '5px',
-      borderRadius: '4px',
-      color: 'red'
     };
-    const [showStatusModal, setShowStatusModal] = useState(false);
-    const [showPriorityModal, setShowPriorityModal] = useState(false);
-    const [showCollabModal, setShowCollabModal] = useState(false);
+    const contextMenuRef = useRef<HTMLDivElement>(null);
+    
+    useEffect(() => {
+      if (contextMenuRef.current) contextMenuRef.current.focus();
+    }, []);
     return (
       <div tabIndex={0}
+        ref={contextMenuRef}
         style={style}
-        className=" focus-visible:bg-slate-600"
-        onBlur={props.onBlur}>
-        <p>Context Menu</p>
-        {/* Add your menu items here */}
-        {showStatusModal && <BaseModal setShowModal={setShowStatusModal} modalTitle="Set Status">{"THE ACTUAL FORM LMAO"}</BaseModal>}
-        {showPriorityModal && <BaseModal setShowModal={setShowPriorityModal} modalTitle="Set Priority">{"THE ACTUAL FORM LMAO"}</BaseModal>}
-        {showCollabModal && <BaseModal setShowModal={setShowCollabModal} modalTitle="Assign Collaborator">{"THE ACTUAL FORM LMAO"}</BaseModal>}
-        <AddButton onclick={()=>setShowStatusModal(true)}>Set Status</AddButton>
-        <AddButton onclick={()=>setShowPriorityModal(true)}>Set Priority</AddButton>
-        <AddButton onclick={()=>setShowCollabModal(true)}>Assign Collaborator</AddButton>
+        className=" focus-visible:bg-slate-600 bg-white text-gray-800 rounded-md p-1 absolute border-2 shadow-sm"
+        onBlur={props.onBlur}
+        >
+        {props.children}
+        
       </div>
     );
   };
