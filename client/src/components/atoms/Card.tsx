@@ -1,8 +1,8 @@
 import { Project } from "@/types/project";
 import StyledLink from "./StyledLink";
 import { Task } from "@/types/task";
-import { ReactNode } from "react";
-
+import { ReactNode, useState } from "react";
+import ContextMenu from "./ContextMenu";
 
 function timing(deadline: String){
   let highestUnit = "seconds";
@@ -45,7 +45,9 @@ export default function Card(props: {
   name: string, 
   description: string, 
   href: string,
-  children: ReactNode 
+  children: ReactNode,
+  onContextMenu?: (event: React.MouseEvent<HTMLDivElement>) => void,//React.MouseEventHandler<HTMLAnchorElement>,
+  onBLur?: () => void
 }) {
   let highestUnit: string;
   let value = -1;
@@ -61,7 +63,10 @@ export default function Card(props: {
       className="w-full border-2 hover:bg-gray-700 hover:text-white p-5 transition-all duration-200 select-none rounded-md"
       href={props.href}
     >
-       {/* <div> */}
+       <div
+        onContextMenu={props.onContextMenu}
+        // onBlur={props.onBLur}
+        >
         <h2 className="font-bold" onMouseOver={()=>{}}>{props.name}</h2>
         <cite id="desc">Description: {props.description}</cite>
 
@@ -69,7 +74,7 @@ export default function Card(props: {
 
         {/* Display the highest non-zero unit of time */}
         {value <= 0 ? (<p className="text-red-500 font-semibold">DEADLINE OVER</p>) : ( <p>{value} {highestUnit} left</p> )}
-      {/* </div> */}
+      </div>
     </StyledLink>
   );
 }
@@ -91,13 +96,25 @@ export function ProjectCard(props: { data: Project; href: string; tasksLeft: Rea
 }
 
 export function TaskCard(props: { data: Task }) {
+  const [contextMenuPosition, setContextMenuPosition] = useState<{ x: number; y: number } | null>(null);
   const task = props.data;
   const clr = (task.priority===0)?"green":((task.priority==1)?"orange":"red");  
+  const handleBlur = () => {setContextMenuPosition(null);console.log("WHATUP7UP")}
+  const handleContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setContextMenuPosition({ x: event.clientX, y: event.clientY });
+    console.log("CRACK A LACKIN")
+  };
   return <Card
+    onContextMenu={handleContextMenu}
+    // onBLur={handleBlur}
     deadline={task.dueDate}
     name={task.title}
     description={task.description}
     href={"#"}>
       <p className={`text-${clr}-500 font-semibold`}>{task.status}</p>
+      {task.assigneeId && <p>{task.assigneeId}</p>}
+      {contextMenuPosition && <ContextMenu position={contextMenuPosition} onBlur={handleBlur}/>}
     </Card>
 }
+

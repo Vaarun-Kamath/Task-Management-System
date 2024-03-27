@@ -16,7 +16,7 @@ import { GetUserById } from "@/app/api/user/handler";
 import { UserDetails } from "@/types/user";
 import Lane from "@/components/atoms/Lane";
 import STATUSES from "@/constants/TaskStatus";
-
+function whhhhy(){}
 export default function ProjectDetails({ params }: { params: { "project-details": string } }) {
   const { "project-details": projectId } = params;
   const [project, setProject] = useState<Project | null>(null);
@@ -77,7 +77,7 @@ export default function ProjectDetails({ params }: { params: { "project-details"
 
     fetchTaskData();
   }, [session, projectId]);
-
+  
   return (
     <>
       <PageHeader
@@ -93,13 +93,13 @@ export default function ProjectDetails({ params }: { params: { "project-details"
           {/* <p> collaborators:{" "}
           {project?.collaborators.map((val, index) => (<p key={index}>{val}</p>))}
           </p> */}
-          <div className="grid md:grid-cols-3 gap-x-1 w-full">
+          <div className="grid md:grid-cols-3 gap-x-1 w-full" onContextMenu={whhhhy}>
             {STATUSES.map((status,stat_index)=>(
               <Lane title={status} key={stat_index}>
               {tasks && tasks
               .filter(task => task.status === status)
               .sort((taskA, taskB) => taskA.priority - taskB.priority)
-              .map((task, index) => (<TaskCard data={task} key={index}/>))}
+              .map((task, index) => <TaskCard data={task} key={index}/>)}
             </Lane>
             ))}
           </div>
