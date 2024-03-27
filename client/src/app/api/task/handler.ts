@@ -100,7 +100,7 @@ export async function AddTask(
         projectId: projectId,
         status: status || "TODO" as string,
         priority: priority || 0,
-        assignees: [],
+        assigneeId: "",
       }
     );
     const { data } = response;

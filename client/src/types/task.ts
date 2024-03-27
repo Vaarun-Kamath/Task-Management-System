@@ -8,5 +8,5 @@ export interface Task {
     projectId: string;
     status: string;
     priority: number;
-    assignees: string[];
+    assigneeId: string;
 }

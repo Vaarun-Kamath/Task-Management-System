@@ -46,7 +46,7 @@ public class Task {
         return createdBy;
     }
 
-    public Set<String> getAssigneeId() {
+    public String getAssigneeId() {
         return assigneeId;
     }
 
