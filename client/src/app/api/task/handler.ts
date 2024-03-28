@@ -1,4 +1,3 @@
-import { isAxiosError } from "axios";
 import axiosInstance, { handleAxiosError } from "@/utils/axiosInstance";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -115,13 +114,46 @@ export async function AddTask(
   }
 }
 
-export async function assignCollaborator(userId: string, taskId: string) {
+// export async function assignCollaborator(userId: string, taskId: string) {
+//   try {
+//     const response = await axiosInstance.post(
+//       `${BACKEND_URL}/api/assignCollaborator`,
+//       {
+//         userId: userId,
+//         taskId: taskId
+//       }
+//     );
+//     const { data } = response;
+//     return data;
+//   } catch (error) {
+//     return handleAxiosError(
+//       error,
+//       500,
+//       "ASIGNEE_API_ERROR",
+//       "Please try again later."
+//     );
+//   }
+// }
+
+export async function UpdateTask(
+  taskId: string,
+  status: string,
+  priority: number,
+  assigneeId: string
+) {
+  const today = new Date();
+  console.log("call", taskId,status,priority,assigneeId, {
+    status: status as string,
+    priority: priority || 0,
+    assigneeId: assigneeId as string,
+  })
   try {
-    const response = await axiosInstance.post(
-      `${BACKEND_URL}/api/assignCollaborator`,
+    const response = await axiosInstance.put(
+      `${BACKEND_URL}/api/updateTask/${taskId}`,
       {
-        userId: userId,
-        taskId: taskId
+        status: status as string,
+        priority: priority || 0,
+        assigneeId: assigneeId as string,
       }
     );
     const { data } = response;
@@ -130,8 +162,8 @@ export async function assignCollaborator(userId: string, taskId: string) {
     return handleAxiosError(
       error,
       500,
-      "ASIGNEE_API_ERROR",
-      "Please try again later."
+      "ERROR_UPDATING_TASKS",
+      "Please try again later.",
     );
   }
 }

@@ -32,6 +32,7 @@ function AddCollaboratorSection(props: { projectId: string }) {
     }
   };
   return (
+    // <div className="bg-white fixed left-1 bottom-1 flex flex-col flex-1 border rounded p-5 gap-5 w-fit opacity-90">
     <div className="flex flex-col flex-1 border p-5 gap-5 w-fit">
       <div>
         <h2 className="font-semibold">Add Collaborator</h2>

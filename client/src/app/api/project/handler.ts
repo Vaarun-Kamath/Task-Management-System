@@ -1,6 +1,6 @@
-import { isAxiosError } from "axios";
+
 import axiosInstance, { handleAxiosError } from "@/utils/axiosInstance";
-import { Project } from "@/types/project";
+
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 

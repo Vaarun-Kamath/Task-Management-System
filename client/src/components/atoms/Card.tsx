@@ -1,9 +1,8 @@
 import { Project } from "@/types/project";
 import StyledLink from "./StyledLink";
 import { Task } from "@/types/task";
-import { ReactNode, useState } from "react";
+import { Dispatch, FocusEventHandler, ReactNode, useState, SetStateAction } from "react";
 import ContextMenu from "./ContextMenu";
-import BaseModal from "@/components/modals/baseModal";
 import AddButton from "./AddButton";
 
 function timing(deadline: string) {
@@ -49,7 +48,7 @@ export default function Card(props: {
   href: string;
   children: ReactNode;
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement>) => void; //React.MouseEventHandler<HTMLAnchorElement>,
-  onBLur?: () => void;
+  // onBLur?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }) {
   let highestUnit: string;
   let value = -1;
@@ -110,64 +109,48 @@ export function ProjectCard(props: {
   );
 }
 
-export function TaskCard(props: { data: Task }) {
+export function TaskCard(props: { 
+  data: Task, 
+  setShowStatusModal: Dispatch<SetStateAction<false|Task>>, 
+  setShowPriorityModal: Dispatch<SetStateAction<false|Task>>, 
+  setShowCollabModal: Dispatch<SetStateAction<false|Task>> 
+}) {
   const [contextMenuPosition, setContextMenuPosition] = useState<{ x: number, y: number } | null>(null);
-  const [showStatusModal, setShowStatusModal] = useState(false);
-  const [showPriorityModal, setShowPriorityModal] = useState(false);
-  const [showCollabModal, setShowCollabModal] = useState(false);
+  
   const task = props.data;
-  const clr = (task.priority === 0) ? "green" : (task.priority == 1) ? "orange" : "red";
-  const handleBlur = () => {
-    setContextMenuPosition(null);
-    console.log("WHATUP7UP");
+  const clr = (task.priority <10) ? "green" : (task.priority < 20) ? "orange" : "red";
+  const handleBlur:FocusEventHandler<HTMLDivElement>|undefined = (event) => {
+    setTimeout(()=>setContextMenuPosition(null),1_000);
   };
   const handleContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     setContextMenuPosition({ x: event.clientX, y: event.clientY });
-    console.log("CRACK A LACKIN");
   };
-
   return (
     <Card
       onContextMenu={handleContextMenu}
-      onBLur={handleBlur}
       deadline={task.dueDate}
       name={task.title}
       description={task.description}
       href={"#"}
     >
-      {showStatusModal && (
-        <BaseModal setShowModal={setShowStatusModal} modalTitle="Set Status">
-          {"THE ACTUAL FORM LMAO"}
-        </BaseModal>
-      )}
-      {showPriorityModal && (
-        <BaseModal setShowModal={setShowPriorityModal} modalTitle="Set Priority">
-          {"THE ACTUAL FORM LMAO"}
-        </BaseModal>
-      )}
-      {showCollabModal && (
-        <BaseModal setShowModal={setShowCollabModal} modalTitle="Assign Collaborator">
-          {"THE ACTUAL FORM LMAO"}
-        </BaseModal>
-      )}
-      <p className={`text-${clr}-500 font-semibold`}>{task.status}</p>
+      <p className={`text-${clr}-500 font-semibold`}>{task.status} {task.priority}</p>
       {task.assigneeId && <p>{task.assigneeId}</p>}
       {contextMenuPosition && (
         <ContextMenu position={contextMenuPosition} onBlur={handleBlur}>
           <AddButton
             width="w-full"
-            onclick={() => setShowStatusModal(true)}>
+            onclick={() => props.setShowStatusModal(task)}>
               Set Status
           </AddButton>
           <AddButton 
             width="w-full"
-            onclick={() => setShowPriorityModal(true)}>
+            onclick={() => props.setShowPriorityModal(task)}>
               Set Priority
           </AddButton>
           <AddButton 
             width="w-full"
-            onclick={() => setShowCollabModal(true)}>
+            onclick={() => props.setShowCollabModal(task)}>
               Assign Collaborator
           </AddButton>
         </ContextMenu>

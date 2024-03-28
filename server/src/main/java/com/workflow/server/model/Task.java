@@ -1,7 +1,6 @@
 package com.workflow.server.model;
 
 import java.util.Date;
-import java.util.Set;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -80,7 +79,7 @@ public class Task {
         createdBy = creatorId;
     }
 
-    public void setCollaborators(String assigneeId) {
+    public void setAssigneeId(String assigneeId) {
         this.assigneeId = assigneeId;
     }
 
@@ -101,6 +100,9 @@ public class Task {
                 ", createdOn=" + createdOn +
                 ", created by='" + createdBy + '\'' +
                 ", assigneeId='" + assigneeId + '\'' +
+                ", status='" + status +'\''+
+                ", priority='" + priority +'\''+
+                ", assigneeId='" + assigneeId +'\''+
                 '}';
     }
 }

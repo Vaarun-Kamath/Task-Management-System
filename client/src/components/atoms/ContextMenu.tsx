@@ -1,9 +1,9 @@
-import { Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState } from "react";
+import { FocusEventHandler, ReactNode, useEffect, useRef } from "react";
 
 
 export default function ContextMenu(props: {
   position: {x:number, y:number},
-  onBlur:any
+  onBlur: FocusEventHandler<HTMLDivElement>|undefined,
   children: ReactNode
 }) {
     const style: React.CSSProperties = {
@@ -17,6 +17,7 @@ export default function ContextMenu(props: {
     }, []);
     return (
       <div tabIndex={0}
+        id="contextMenu"
         ref={contextMenuRef}
         style={style}
         className=" focus-visible:bg-slate-600 bg-white text-gray-800 rounded-md p-1 absolute border-2 shadow-sm"

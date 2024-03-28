@@ -7,8 +7,8 @@ export default function Lane(props: {
     children: ReactNode 
   }) {  
     return (
-      <div className="w-full h-screen flex flex-col border-2 p-2">
-        <h1>{props.title}</h1>
+      <div className="w-full h-screen flex flex-col bg-gray-50 border-gray-200 border rounded-md p-5 gap-3">
+        <h1 className="text-center font-semibold">{props.title}</h1>
       {props.children}
       </div>
     );
