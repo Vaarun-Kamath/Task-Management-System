@@ -9,12 +9,13 @@ import STATUSES from "@/constants/TaskStatus";
 import StyledInput from "../atoms/StyledInput";
 import StyledOption from "../atoms/StyledOption";
 import SubmitButton from "../atoms/SubmitButton";
-import { Task } from "@/types/task";
-import { Project } from "@/types/project";
+import { Task } from "@/types";
+import { ProjectType } from "@/types";
 
 const inputClsName: string = "w-full p-2 my-3 border-gray-400 border";
-const errClsName: string = "transition-all duration-200 bg-red-500 w-full text-sm rounded-sm text-white font-medium flex items-center px-1.5 py-1";
-type TaskFormProps = { callbackUrl?: string; projectId: string};
+const errClsName: string =
+  "transition-all duration-200 bg-red-500 w-full text-sm rounded-sm text-white font-medium flex items-center px-1.5 py-1";
+type TaskFormProps = { callbackUrl?: string; projectId: string };
 
 export default function TaskForm(props: TaskFormProps) {
   const [taskError, setTaskError] = useState<null | string>(null);
@@ -31,7 +32,10 @@ export default function TaskForm(props: TaskFormProps) {
     setTimeout(() => setTaskError(null), 10_000);
   };
 
-  const validateInputs = ( title: FormDataEntryValue, dueDate: FormDataEntryValue ): boolean => {
+  const validateInputs = (
+    title: FormDataEntryValue,
+    dueDate: FormDataEntryValue
+  ): boolean => {
     if (title === "") {
       setLoading(false);
       errorHandler("Task title is required");
@@ -51,7 +55,9 @@ export default function TaskForm(props: TaskFormProps) {
     return true;
   };
 
-  const handleSubmit = async ( event: React.FormEvent<HTMLFormElement> ): Promise<void> => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
     setLoading(true);
     const formData = new FormData(event.currentTarget);
@@ -82,32 +88,36 @@ export default function TaskForm(props: TaskFormProps) {
     }
   };
 
-  
-
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <StyledInput className={inputClsName}
-        name="title" type="text"
+      <StyledInput
+        className={inputClsName}
+        name="title"
+        type="text"
         placeholder="Task title"
         required={true}
       />
-      <StyledInput className={inputClsName}
+      <StyledInput
+        className={inputClsName}
         name="description"
         type="text"
         placeholder="Task Description"
         required={true}
       />
-      <StyledInput className={inputClsName}
+      <StyledInput
+        className={inputClsName}
         name="dueDate"
         type="date"
         required={true}
       />
-      <StyledInput className={inputClsName}
+      <StyledInput
+        className={inputClsName}
         name="priority"
         type="number"
         pattern="[0-9]+"
       />
-      <StyledOption className={inputClsName}
+      <StyledOption
+        className={inputClsName}
         name="status"
         options={STATUSES}
         // onChange={e=>setSelectedValue(e.target.value)}
@@ -119,13 +129,15 @@ export default function TaskForm(props: TaskFormProps) {
         </span>
       )}
 
-      <SubmitButton sz={15} loading={loading}> Create </SubmitButton>
+      <SubmitButton sz={15} loading={loading}>
+        {" "}
+        Create{" "}
+      </SubmitButton>
     </form>
   );
 }
 
-
-export function StatusForm(props: { callbackUrl?: string; task: Task}){
+export function StatusForm(props: { callbackUrl?: string; task: Task }) {
   const [taskError, setTaskError] = useState<null | string>(null);
   const [loading, setLoading] = useState(false);
   const task = props.task;
@@ -135,7 +147,9 @@ export function StatusForm(props: { callbackUrl?: string; task: Task}){
     setTimeout(() => setTaskError(null), 10_000);
   };
 
-  const handleSubmit = async ( event: React.FormEvent<HTMLFormElement> ): Promise<void> => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
     setLoading(true);
     const formData = new FormData(event.currentTarget);
@@ -156,13 +170,10 @@ export function StatusForm(props: { callbackUrl?: string; task: Task}){
       setLoading(false);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <StyledOption className={inputClsName}
-        name="status"
-        options={STATUSES}
-      />
+      <StyledOption className={inputClsName} name="status" options={STATUSES} />
 
       {taskError && (
         <span className={errClsName}>
@@ -170,14 +181,15 @@ export function StatusForm(props: { callbackUrl?: string; task: Task}){
         </span>
       )}
 
-      <SubmitButton sz={15} loading={loading}> Update </SubmitButton>
+      <SubmitButton sz={15} loading={loading}>
+        {" "}
+        Update{" "}
+      </SubmitButton>
     </form>
   );
-
 }
 
-
-export function PriorityForm(props: { callbackUrl?: string; task: Task}){
+export function PriorityForm(props: { callbackUrl?: string; task: Task }) {
   const [taskError, setTaskError] = useState<null | string>(null);
   const [loading, setLoading] = useState(false);
   const task = props.task;
@@ -187,7 +199,9 @@ export function PriorityForm(props: { callbackUrl?: string; task: Task}){
     setTimeout(() => setTaskError(null), 10_000);
   };
 
-  const handleSubmit = async ( event: React.FormEvent<HTMLFormElement> ): Promise<void> => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
     setLoading(true);
     const formData = new FormData(event.currentTarget);
@@ -208,10 +222,11 @@ export function PriorityForm(props: { callbackUrl?: string; task: Task}){
       setLoading(false);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <StyledInput className={inputClsName}
+      <StyledInput
+        className={inputClsName}
         name="priority"
         type="number"
         pattern="[0-9]+"
@@ -223,12 +238,19 @@ export function PriorityForm(props: { callbackUrl?: string; task: Task}){
         </span>
       )}
 
-      <SubmitButton sz={15} loading={loading}> Update </SubmitButton>
+      <SubmitButton sz={15} loading={loading}>
+        {" "}
+        Update{" "}
+      </SubmitButton>
     </form>
   );
 }
 
-export function CollabForm(props: { callbackUrl?: string; task: Task, project: Project}){
+export function CollabForm(props: {
+  callbackUrl?: string;
+  task: Task;
+  project: ProjectType;
+}) {
   const [taskError, setTaskError] = useState<null | string>(null);
   const [loading, setLoading] = useState(false);
   const task = props.task;
@@ -238,7 +260,9 @@ export function CollabForm(props: { callbackUrl?: string; task: Task, project: P
     setTimeout(() => setTaskError(null), 10_000);
   };
 
-  const handleSubmit = async ( event: React.FormEvent<HTMLFormElement> ): Promise<void> => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
     setLoading(true);
     const formData = new FormData(event.currentTarget);
@@ -259,10 +283,11 @@ export function CollabForm(props: { callbackUrl?: string; task: Task, project: P
       setLoading(false);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <StyledOption className={inputClsName}
+      <StyledOption
+        className={inputClsName}
         name="asignees"
         options={props.project.collaborators}
       />
@@ -273,7 +298,10 @@ export function CollabForm(props: { callbackUrl?: string; task: Task, project: P
         </span>
       )}
 
-      <SubmitButton sz={15} loading={loading}> Update </SubmitButton>
+      <SubmitButton sz={15} loading={loading}>
+        {" "}
+        Update{" "}
+      </SubmitButton>
     </form>
   );
 }

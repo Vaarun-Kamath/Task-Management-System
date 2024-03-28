@@ -82,9 +82,6 @@ export default function ProjectForm(props: Props) {
     }
   };
 
-
-  
-
   return (
     <form onSubmit={handleSubmit} className="w-full">
       <StyledInput
@@ -110,7 +107,10 @@ export default function ProjectForm(props: Props) {
           <FaExclamationCircle className="mr-2 animate-pulse" /> {projectError}
         </span>
       )}
-      <SubmitButton sz={15} loading={loading}> Create </SubmitButton>
+      <SubmitButton sz={15} loading={loading}>
+        {" "}
+        Create{" "}
+      </SubmitButton>
     </form>
   );
 }

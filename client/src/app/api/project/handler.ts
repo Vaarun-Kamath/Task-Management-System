@@ -1,6 +1,4 @@
-
 import axiosInstance, { handleAxiosError } from "@/utils/axiosInstance";
-
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -16,9 +14,9 @@ export async function GetProjects(user_id: string | null | undefined) {
     return data;
   } catch (error) {
     return handleAxiosError(
-      error, 
-      500, 
-      "ERROR_GETTING_PROJECTS", 
+      error,
+      500,
+      "ERROR_GETTING_PROJECTS",
       "Please try again later."
     );
   }
@@ -71,7 +69,8 @@ export async function AddProject(
       error,
       500,
       "ERROR_CREATING_PROJECT",
-      "Please try again later.");
+      "Please try again later."
+    );
   }
 }
 

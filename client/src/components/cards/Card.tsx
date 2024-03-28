@@ -1,9 +1,6 @@
-import { Project } from "@/types/project";
-import StyledLink from "./StyledLink";
-import { Task } from "@/types/task";
-import { Dispatch, FocusEventHandler, ReactNode, useState, SetStateAction } from "react";
-import ContextMenu from "./ContextMenu";
-import AddButton from "./AddButton";
+import StyledLink from "../atoms/StyledLink";
+import { ReactNode } from "react";
+import { ProjectType } from "@/types";
 
 function timing(deadline: string) {
   let highestUnit = "seconds";
@@ -61,7 +58,7 @@ export default function Card(props: {
 
   return (
     <StyledLink
-      className="w-full border-2 hover:bg-gray-700 hover:text-white p-5 transition-all duration-200 select-none rounded-md"
+      className="w-full border-2 hover:bg-gray-700 hover:text-white transition-all duration-200 select-none rounded-md p-5"
       href={props.href}
     >
       <div
@@ -76,10 +73,13 @@ export default function Card(props: {
         {props.children}
 
         {/* Display the highest non-zero unit of time */}
-        {value <= 0 ? ( 
+        {value <= 0 ? (
           <p className="text-red-500 font-semibold"> DEADLINE OVER </p>
-        ) : ( 
-          <p> {value} {highestUnit} left </p> 
+        ) : (
+          <p>
+            {" "}
+            {value} {highestUnit} left{" "}
+          </p>
         )}
       </div>
     </StyledLink>
@@ -87,7 +87,7 @@ export default function Card(props: {
 }
 
 export function ProjectCard(props: {
-  data: Project;
+  data: ProjectType;
   href: string;
   tasksLeft: ReactNode;
 }) {
@@ -104,56 +104,6 @@ export function ProjectCard(props: {
         <p className="text-green-500 font-semibold">No More Tasks</p>
       ) : (
         <p className="text-orange-500 font-semibold">{tasksLeft} Tasks</p>
-      )}
-    </Card>
-  );
-}
-
-export function TaskCard(props: { 
-  data: Task, 
-  setShowStatusModal: Dispatch<SetStateAction<false|Task>>, 
-  setShowPriorityModal: Dispatch<SetStateAction<false|Task>>, 
-  setShowCollabModal: Dispatch<SetStateAction<false|Task>> 
-}) {
-  const [contextMenuPosition, setContextMenuPosition] = useState<{ x: number, y: number } | null>(null);
-  
-  const task = props.data;
-  const clr = (task.priority <10) ? "green" : (task.priority < 20) ? "orange" : "red";
-  const handleBlur:FocusEventHandler<HTMLDivElement>|undefined = (event) => {
-    setTimeout(()=>setContextMenuPosition(null),1_000);
-  };
-  const handleContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setContextMenuPosition({ x: event.clientX, y: event.clientY });
-  };
-  return (
-    <Card
-      onContextMenu={handleContextMenu}
-      deadline={task.dueDate}
-      name={task.title}
-      description={task.description}
-      href={"#"}
-    >
-      <p className={`text-${clr}-500 font-semibold`}>{task.status} {task.priority}</p>
-      {task.assigneeId && <p>{task.assigneeId}</p>}
-      {contextMenuPosition && (
-        <ContextMenu position={contextMenuPosition} onBlur={handleBlur}>
-          <AddButton
-            width="w-full"
-            onclick={() => props.setShowStatusModal(task)}>
-              Set Status
-          </AddButton>
-          <AddButton 
-            width="w-full"
-            onclick={() => props.setShowPriorityModal(task)}>
-              Set Priority
-          </AddButton>
-          <AddButton 
-            width="w-full"
-            onclick={() => props.setShowCollabModal(task)}>
-              Assign Collaborator
-          </AddButton>
-        </ContextMenu>
       )}
     </Card>
   );

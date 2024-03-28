@@ -12,8 +12,12 @@ const axiosInstance = axios.create({
 
 export default axiosInstance;
 
-
-export function handleAxiosError(error:unknown, statusCode: number, errorCode: string, errorMessage: string){
+export function handleAxiosError(
+  error: unknown,
+  statusCode: number,
+  errorCode: string,
+  errorMessage: string
+) {
   if (isAxiosError(error) && error.response) {
     const { status, errorCode, errorMessage } = error.response.data;
     return { status, errorCode, errorMessage };
@@ -22,7 +26,7 @@ export function handleAxiosError(error:unknown, statusCode: number, errorCode: s
     return {
       status: statusCode,
       errorCode: errorCode,
-      errorMessage: errorMessage
+      errorMessage: errorMessage,
     };
   }
 }

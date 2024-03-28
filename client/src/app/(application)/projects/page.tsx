@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Project } from "@/types/project";
-import { ProjectCard } from "@/components/atoms/Card";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { GetProjects } from "@/app/api/project/handler";
 import AddProject from "@/components/modals/addProjectModal";
-import AddButton from "@/components/atoms/AddButton";
-import { GetTasks } from "@/app/api/task/handler";
 import PageHeader from "@/components/atoms/PageHeader";
+import { MdAddChart } from "react-icons/md";
+import { ProjectType } from "@/types";
+import { ProjectCardWithTasks } from "@/components/cards/ProjectTaskCard";
 
 function Projects() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<ProjectType[]>([]);
   const [showModal, setShowModal] = useState(false);
 
   const { data: session } = useSession({
@@ -40,45 +39,31 @@ function Projects() {
 
   return (
     <>
-    <PageHeader title="Projects" />
-    <div className="flex flex-col px-2 mb-4 gap-5 items-center">
-      <div className="w-full">
-        <AddButton onclick={() => setShowModal(true)} >Add Project</AddButton>
+      <PageHeader title="Projects" />
+      <div className="flex flex-col px-2 mb-4 gap-5 items-center">
+        <div className="w-full">
+          <button
+            className={
+              "flex border-2 items-center gap-2 px-4 py-1 rounded-sm hover:bg-gray-700 hover:text-white transition-all duration-200 "
+            }
+            onClick={() => setShowModal(true)}
+          >
+            <span>
+              <MdAddChart />
+            </span>
+            Add Project
+          </button>
+        </div>
+        {showModal && <AddProject setShowModal={setShowModal} />}
+        <div className="grid md:grid-cols-3 gap-x-3 gap-y-2 w-full">
+          {projects &&
+            projects.map((project, index) => (
+              <ProjectCardWithTasks project={project} key={index} />
+            ))}
+        </div>
       </div>
-      {showModal && <AddProject setShowModal={setShowModal} />}
-      <div className="grid md:grid-cols-3 gap-x-3 gap-y-2 w-full">
-        {projects &&
-          projects.map((project, index) => (
-            <ProjectCardWithTasks project={project} key={index} />
-          ))}
-      </div>
-    </div>
     </>
   );
-}
-
-interface ProjectCardWithTasksProps {
-  project: Project;
-}
-
-function ProjectCardWithTasks({ project }: ProjectCardWithTasksProps) {
-  const [tasksLeft, setTasksLeft] = useState<number>(0);
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await GetTasks(project._id);
-        const tasks = response.content;
-        setTasksLeft(tasks.length);
-      } catch (error) {
-        console.error(`Error fetching tasks for project ${project._id}:`, error);
-      }
-    };
-
-    fetchTasks();
-  }, [project._id]);
-
-  return <ProjectCard data={project} href={`/projects/${project._id}/kanban`} tasksLeft={tasksLeft} />;
 }
 
 export default Projects;
