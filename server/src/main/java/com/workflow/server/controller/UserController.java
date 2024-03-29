@@ -29,6 +29,7 @@ public class UserController {
     @Autowired
     ProjectController projectController;
 
+
     @GetMapping("/api/userById") //TODO dont send password.currently sends name, email and password as well
     @CrossOrigin("http://localhost:3000")
     public ResponseEntity<Map<String, Object>> getUserById(@RequestParam String userId) {
@@ -90,5 +91,15 @@ public class UserController {
 
     private User CheckUserCollaboration(String username) {
         return userRepo.findByUsername(username);
+    }
+
+    public String getUserName(String id){
+        if(id == null){
+            return "";
+        }
+        Optional<User> result = userRepo.findById(id);
+        User user = result.get();
+        String username = user.getUsername();
+        return username;
     }
 }

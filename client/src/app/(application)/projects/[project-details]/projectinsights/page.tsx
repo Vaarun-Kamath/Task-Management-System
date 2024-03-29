@@ -9,6 +9,7 @@ import { GetUserById } from "@/app/api/user/handler";
 import ProjTaskBreakdown from "@/components/charts/ProjTaskBreakdown";
 import TasksTimeline from "@/components/charts/TasksTimeline";
 import { ProjectType, UserDetails } from "@/types";
+import UserContributions from "@/components/charts/UserContributions";
 
 const ProjectInsights = ({
   params,
@@ -73,6 +74,8 @@ const ProjectInsights = ({
       <ProjTaskBreakdown projectId={projectId} />
       <h1>Completed Tasks Timeline</h1>
       <TasksTimeline projectId={projectId} />
+      <h1>User Contributions</h1>
+      <UserContributions projectId={projectId} />
     </>
   );
 };

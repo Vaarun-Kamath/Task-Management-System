@@ -1,9 +1,9 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
 import { Chart } from "chart.js/auto";
-import { GetTasksBreakdown } from "@/app/api/task/handler";
+import { GetUserContributions } from "@/app/api/task/handler";
 
-export default function BarChart(props) {
+export default function UserContributions(props) {
   const chartRef = useRef(null);
   const [chartData, setChartData] = useState([]);
 
@@ -11,7 +11,7 @@ export default function BarChart(props) {
     const fetchData = async () => {
       try {
         const projectId = props.projectId;
-        const response = await GetTasksBreakdown(projectId);
+        const response = await GetUserContributions(projectId);
         setChartData(response.content);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -32,25 +32,21 @@ export default function BarChart(props) {
       const newChart = new Chart(context, {
         type: "bar",
         data: {
-          labels: chartData.labels,
-          // ["Pending Tasks", "Completed Tasks", "Tasks beyond deadline"],
+          labels: chartData.assignees,
+          // ["Chocolate", "Vanilla", "Strawberry"],
+          // chartData.labels,
+         
           datasets: [
             {
-              label: "Tasks status",
-              data: chartData.values,
-              // [12, 16, 5],
-              backgroundColor: [
-                "rgb(255, 99, 132, 0.3)",
-                "rgb(255, 159, 64, 0.3)",
-                "rgb(104, 10, 86, 0.3)",
-              ],
-              borderColor: [
-                "rgb(255, 99, 132, 0.3)",
-                "rgb(255, 159, 64, 0.3)",
-                "rgb(255, 205, 86, 0.3)",
-              ],
-              borderWidth: 1,
-            },
+              label: "Completed Tasks",
+              fillColor: "rgb(23, 203, 71, 0.7)",
+              data: chartData.completed
+          },
+          {
+              label: "Pending Tasks",
+              fillColor: "rgb(255, 202, 0, 0.7)",
+              data: chartData.pending
+          },
           ],
         },
         options: {

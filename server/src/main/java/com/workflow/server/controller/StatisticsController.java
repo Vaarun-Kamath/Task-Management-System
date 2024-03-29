@@ -25,14 +25,18 @@ import com.workflow.server.model.Project;
 import com.workflow.server.model.Statistics;
 import com.workflow.server.model.Task;
 import com.workflow.server.model.User;
+
 import com.workflow.server.utils.CommonResponse;
+import com.workflow.server.controller.UserController;
 
 @RestController
 public class StatisticsController {
 
     @Autowired
-    StatisticsRepository statrepo;
+    private StatisticsRepository statrepo;
 
+    @Autowired
+    UserController usercontroller;
     // Get Mappings
 
     @GetMapping("/api/tasksbreakdown")
@@ -54,7 +58,7 @@ public class StatisticsController {
         int missed = 0;
         Date today = new Date();
         for (Task i: tasks){
-            if((i.getStatus()).equals("COMPLETED")){
+            if((i.getStatus()).equals("DONE")){
               completed++;
             }
             else {
@@ -64,7 +68,7 @@ public class StatisticsController {
               else if((i.getStatus()).equals("TODO")){
                 todo++;
               }
-              else if((i.getStatus()).equals("IN-PROGRESS")){
+              else if((i.getStatus()).equals("CURRENT")){
                 pending++;
               }
             }
@@ -76,7 +80,7 @@ public class StatisticsController {
                 .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", resobj));
     }
 
-    @GetMapping("/api/taskstimeline")
+    @GetMapping("/api/usercontributions")
     @CrossOrigin("http://localhost:3000")//* Done */
     public ResponseEntity<Map<String, Object>> getUserContributions(@RequestParam String projectId) {
 
@@ -84,8 +88,51 @@ public class StatisticsController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Something went wrong!! [Project missing]"));
         }
+        
+        List<Statistics> tasks = statrepo.findByProjectId(projectId);
+        // System.out.println("Tasks: "+ tasks);
+       
+        HashMap<String, Object> resobj = new HashMap<>(); 
+        List<String> assignees = new ArrayList<>();
+        List<Integer> completedTasks = new ArrayList<>();
+        List<Integer> pendingTasks = new ArrayList<>();
+        for (Task i: tasks){
+          String assignee_id = i.getAssigneeId();
+          if(assignee_id.equals("")){ continue; }
+          String assignee = usercontroller.getUserName(assignee_id);
+          
+          int assigneeIndex = assignees.indexOf(assignee);
+          boolean completed = i.getStatus().equals("DONE");
+          if (assigneeIndex == -1) {
+            assignees.add(assignee);
+            completedTasks.add(completed ? 1 : 0);
+            pendingTasks.add(completed ? 0 : 1);
+          } else {
+            int countIndex = completed ? completedTasks.get(assigneeIndex) : pendingTasks.get(assigneeIndex);
+            (completed ? completedTasks : pendingTasks).set(assigneeIndex, countIndex + 1);
+          }
+      }
+      
+      resobj.put("assignees", assignees);
+      resobj.put("completed", completedTasks);
+      resobj.put("pending", pendingTasks);
 
-        List<Statistics> tasks = statrepo.findCompletedbyProjectId(projectId,"COMPLETED");
+      System.out.println(resobj);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", resobj));
+    }
+    
+
+    @GetMapping("/api/taskstimeline")
+    @CrossOrigin("http://localhost:3000")//* Done */
+    public ResponseEntity<Map<String, Object>> getTasksTimeline(@RequestParam String projectId) {
+
+        if (projectId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Something went wrong!! [Project missing]"));
+        }
+
+        List<Statistics> tasks = statrepo.findCompletedbyProjectId(projectId,"DONE");
         // System.out.println("Tasks: "+ tasks);
         
         String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
