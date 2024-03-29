@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from "react";
-import { IoCloseSharp } from "react-icons/io5";
 import ProjectForm from "../forms/ProjectForm";
 import BaseModal from "./baseModal";
 

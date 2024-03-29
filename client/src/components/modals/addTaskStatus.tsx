@@ -1,7 +1,7 @@
 import { Task } from "@/types";
 import { Dispatch, SetStateAction } from "react";
-import { StatusForm } from "../forms/TaskForm";
 import BaseModal from "./baseModal";
+import { StatusForm } from "../forms/StatusForm";
 
 export function TaskStatus({
   setShowModal,

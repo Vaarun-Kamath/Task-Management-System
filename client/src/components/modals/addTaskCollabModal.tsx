@@ -1,7 +1,7 @@
 import { Task, ProjectType } from "@/types";
 import { Dispatch, SetStateAction } from "react";
-import { CollabForm } from "../forms/TaskForm";
 import BaseModal from "./baseModal";
+import { CollabForm } from "../forms/CollabForm";
 
 export function TaskCollab({
   setShowModal,

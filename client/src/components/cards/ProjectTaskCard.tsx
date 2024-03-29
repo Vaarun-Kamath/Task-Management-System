@@ -1,7 +1,7 @@
 import { GetTasks } from "@/app/api/task/handler";
 import { useState, useEffect } from "react";
-import { ProjectCard } from "./Card";
 import { ProjectType } from "@/types";
+import { ProjectCard } from "./ProjectCard";
 
 interface ProjectCardWithTasksProps {
   project: ProjectType;

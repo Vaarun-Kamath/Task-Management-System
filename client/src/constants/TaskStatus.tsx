@@ -1,2 +1,1 @@
-const STATUSES: Array<string> = ["TODO", "CURRENT", "DONE"];
-export default STATUSES;
+export const StatusList: Array<string> = ["TODO", "CURRENT", "DONE"];

@@ -1,7 +1,7 @@
 import { Task } from "@/types";
 import { Dispatch, SetStateAction } from "react";
-import { PriorityForm } from "../forms/TaskForm";
 import BaseModal from "./baseModal";
+import { PriorityForm } from "../forms/PriorityForm";
 
 export function TaskPriority({
   setShowModal,

@@ -1,6 +1,5 @@
 import StyledLink from "../atoms/StyledLink";
 import { ReactNode } from "react";
-import { ProjectType } from "@/types";
 
 function timing(deadline: string) {
   let highestUnit = "seconds";
@@ -44,8 +43,7 @@ export default function Card(props: {
   description: string;
   href: string;
   children: ReactNode;
-  onContextMenu?: (event: React.MouseEvent<HTMLDivElement>) => void; //React.MouseEventHandler<HTMLAnchorElement>,
-  // onBLur?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onContextMenu?: (event: React.MouseEvent<HTMLDivElement>) => void;
 }) {
   let highestUnit: string;
   let value = -1;
@@ -58,23 +56,18 @@ export default function Card(props: {
 
   return (
     <StyledLink
-      className="w-full border-2 hover:bg-gray-700 hover:text-white transition-all duration-200 select-none rounded-md p-5"
+      className="w-full border-2 hover:bg-gray-700 hover:text-white transition-all duration-200 select-none rounded-md p-5 h-fit"
       href={props.href}
     >
-      <div
-        onContextMenu={props.onContextMenu}
-        // onBlur={props.onBLur}
-      >
-        <h2 className="font-bold" onMouseOver={() => {}}>
-          {props.name}
-        </h2>
+      <div onContextMenu={props.onContextMenu}>
+        <h2 className="font-bold">{props.name}</h2>
         <cite id="desc">{props.description}</cite>
 
         {props.children}
 
         {/* Display the highest non-zero unit of time */}
         {value <= 0 ? (
-          <p className="text-red-500 font-semibold"> DEADLINE OVER </p>
+          <p className="text-red-500 font-semibold"> Deadline Over </p>
         ) : (
           <p>
             {" "}
@@ -83,28 +76,5 @@ export default function Card(props: {
         )}
       </div>
     </StyledLink>
-  );
-}
-
-export function ProjectCard(props: {
-  data: ProjectType;
-  href: string;
-  tasksLeft: ReactNode;
-}) {
-  const proj = props.data;
-  let tasksLeft = props.tasksLeft;
-  return (
-    <Card
-      deadline={proj.deadline}
-      name={proj.name}
-      description={proj.description}
-      href={props.href}
-    >
-      {tasksLeft === 0 ? (
-        <p className="text-green-500 font-semibold">No More Tasks</p>
-      ) : (
-        <p className="text-orange-500 font-semibold">{tasksLeft} Tasks</p>
-      )}
-    </Card>
   );
 }

@@ -26,6 +26,7 @@ export default function StyledOption({
       onChange={handleChange}
       {...rest}
     >
+      <option value={0}>Select an Option</option>
       {options.map((option, index) => (
         <option key={index} value={option}>
           {" "}

@@ -1,6 +1,4 @@
-import { Task } from "@/types";
 import { Dispatch, SetStateAction, useState } from "react";
-import { StatusForm } from "../forms/TaskForm";
 import BaseModal from "./baseModal";
 import AddCollabForm from "../forms/addCollabForm";
 import { AddCollaborator } from "@/app/api/project/handler";

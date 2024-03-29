@@ -11,7 +11,9 @@ const inter = Open_Sans({
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en" className={inter.variable}>
-      <head></head>
+      <head>
+        <title>Task Management</title>
+      </head>
       <body className="antialiased">
         <AuthProvider>{children}</AuthProvider>
       </body>

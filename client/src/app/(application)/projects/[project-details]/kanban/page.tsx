@@ -10,15 +10,16 @@ import PageHeader from "@/components/atoms/PageHeader";
 import Lane from "@/components/atoms/Lane";
 import { TaskCard } from "@/components/cards/TaskCard";
 import AddTask from "@/components/modals/addTaskModal";
-import STATUSES from "@/constants/TaskStatus";
 import { ProjectType, Task, UserDetails } from "@/types";
 import { MdAddChart } from "react-icons/md";
 import { TaskCollab } from "@/components/modals/addTaskCollabModal";
 import { TaskPriority } from "@/components/modals/addTaskPriority";
 import { TaskStatus } from "@/components/modals/addTaskStatus";
 import { AddCollabModal } from "@/components/modals/addCollabModal";
+import TaskContextMenu from "@/components/atoms/TaskContextMenu";
+import { IoMdPersonAdd } from "react-icons/io";
+import { StatusList } from "@/constants/TaskStatus";
 
-function whhhhy() {}
 export default function ProjectDetails({
   params,
 }: {
@@ -36,6 +37,7 @@ export default function ProjectDetails({
     false
   );
   const [showCollabModal, setShowCollabModal] = useState<false | Task>(false);
+  const [contextMenuTask, setContextMenuTask] = useState<Task>();
   const router = useRouter();
 
   const { data: session } = useSession({
@@ -52,20 +54,16 @@ export default function ProjectDetails({
         const response = await GetProjectById(projectId);
         if (response.errorCode) {
           console.log("Error getting project", response);
-          // window.location.href = "/404";
           router.push("/404");
         } else {
           setLoading(false);
           setProject(response.content);
 
           try {
-            //getting the creator of the project
             const respCreator = await GetUserById(response.content.createdBy);
-            if (respCreator.errorCode) {
+            if (respCreator.errorCode)
               console.log("Error getting projectCreator", respCreator);
-            } else {
-              setCreator(respCreator.content);
-            }
+            else setCreator(respCreator.content);
           } catch (error) {
             console.error("Error fetching data[User]:", error);
           }
@@ -93,15 +91,34 @@ export default function ProjectDetails({
 
     fetchTaskData();
   }, [session, projectId]);
+
   const handleStatus: React.Dispatch<React.SetStateAction<boolean>> = (x) => {
+    console.log("handleStatus", x);
     if (!x) setShowStatusModal(x);
   };
+
   const handlePriority: React.Dispatch<React.SetStateAction<boolean>> = (x) => {
     if (!x) setShowPriorityModal(x);
   };
+
   const handleCollab: React.Dispatch<React.SetStateAction<boolean>> = (x) => {
     if (!x) setShowCollabModal(x);
   };
+
+  const [contextMenuPosition, setContextMenuPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const handleContextMenu = (
+    event: React.MouseEvent<HTMLDivElement>,
+    task: Task
+  ) => {
+    event.preventDefault();
+    setContextMenuPosition({ x: event.clientX, y: event.clientY });
+    setContextMenuTask(task);
+  };
+
   return (
     <>
       <PageHeader
@@ -113,7 +130,6 @@ export default function ProjectDetails({
       />
       {loading ? null : (
         <div className=" z-50 flex flex-col px-2 mb-4 gap-5 w-full items-center">
-          {/* <AddCollaboratorSection projectId={projectId} /> */}
           {addTaskModal && (
             <AddTask setShowModal={setAddTaskModal} projectId={projectId} />
           )}
@@ -158,29 +174,38 @@ export default function ProjectDetails({
               onClick={() => setShowAddCollabModal(true)}
             >
               <span>
-                <MdAddChart />
+                <IoMdPersonAdd />
               </span>
               Add Collaborator
             </button>
           </div>
-          <div
-            className="grid md:grid-cols-3 gap-x-3 w-full"
-            onContextMenu={whhhhy}
-          >
-            {STATUSES.map((status, stat_index) => (
+          <div className="grid md:grid-cols-3 gap-x-3 gap-y-3 w-full">
+            {StatusList.map((status, stat_index) => (
               <Lane title={status} key={stat_index}>
                 {tasks &&
                   tasks
                     .filter((task) => task.status === status)
                     .sort((taskA, taskB) => taskB.priority - taskA.priority)
                     .map((task, index) => (
-                      <TaskCard
-                        data={task}
-                        key={index}
-                        setShowStatusModal={setShowStatusModal}
-                        setShowPriorityModal={setShowPriorityModal}
-                        setShowCollabModal={setShowCollabModal}
-                      />
+                      <>
+                        <TaskCard
+                          data={task}
+                          key={index}
+                          onContextMenu={(event) =>
+                            handleContextMenu(event, task)
+                          }
+                        />
+                        {contextMenuPosition && contextMenuTask && (
+                          <TaskContextMenu
+                            contextMenuPosition={contextMenuPosition}
+                            setContextMenuPosition={setContextMenuPosition}
+                            setShowStatusModal={setShowStatusModal}
+                            setShowPriorityModal={setShowPriorityModal}
+                            setShowCollabModal={setShowCollabModal}
+                            task={contextMenuTask}
+                          />
+                        )}
+                      </>
                     ))}
               </Lane>
             ))}

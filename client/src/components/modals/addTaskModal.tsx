@@ -1,11 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import TaskForm, {
-  CollabForm,
-  PriorityForm,
-  StatusForm,
-} from "../forms/TaskForm";
+import TaskForm from "../forms/TaskForm";
 import BaseModal from "./baseModal";
-import { Task, ProjectType } from "@/types";
 
 const AddTask = ({
   setShowModal,
@@ -21,7 +16,4 @@ const AddTask = ({
   );
 };
 
-
 export default AddTask;
-
-

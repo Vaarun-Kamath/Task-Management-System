@@ -1,27 +1,39 @@
-import { FocusEventHandler, ReactNode, useEffect, useRef } from "react";
+import { FocusEventHandler, ReactNode, useState } from "react";
 
 export default function ContextMenu(props: {
   position: { x: number; y: number };
-  onBlur: FocusEventHandler<HTMLDivElement> | undefined;
   children: ReactNode;
+  setContextMenuPosition: (position: { x: number; y: number } | null) => void;
 }) {
+  const [timer, setTimer] = useState<number | null>(null);
+
+  const handleBlur: FocusEventHandler<HTMLDivElement> | undefined = () => {
+    if (timer) clearTimeout(timer);
+    props.setContextMenuPosition(null);
+  };
+
+  const handleMouseEnter = () => {
+    if (timer) clearTimeout(timer);
+  };
+
+  const handleMouseLeave = () => {
+    const timeoutId = setTimeout(handleBlur, 300);
+    setTimer(timeoutId);
+  };
+
   const style: React.CSSProperties = {
     top: props.position.y,
     left: props.position.x,
   };
-  const contextMenuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (contextMenuRef.current) contextMenuRef.current.focus();
-  }, []);
   return (
     <div
       tabIndex={0}
       id="contextMenu"
-      ref={contextMenuRef}
       style={style}
-      className=" focus-visible:bg-slate-600 bg-white text-gray-800 rounded-md p-1 absolute border-2 shadow-sm"
-      onBlur={props.onBlur}
+      className=" focus-visible:bg-slate-600 bg-white text-gray-800 rounded-md absolute drop-shadow-md"
+      onBlur={handleBlur}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {props.children}
     </div>
