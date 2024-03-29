@@ -42,6 +42,7 @@ export default function Card(props: {
   name: string;
   description: string;
   href: string;
+  clr?: string;
   children: ReactNode;
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement>) => void;
 }) {
@@ -56,11 +57,16 @@ export default function Card(props: {
 
   return (
     <StyledLink
-      className="w-full border-2 hover:bg-gray-700 hover:text-white transition-all duration-200 select-none rounded-md p-5 h-fit"
+      className="w-full border-2 hover:bg-gray-700 hover:text-white transition-all duration-200 select-none rounded-md p-5 h-fit "
       href={props.href}
     >
       <div onContextMenu={props.onContextMenu}>
-        <h2 className="font-bold">{props.name}</h2>
+        <div className={`font-bold justify-center flex text-center `}>
+          <h2 className={`ps-10 pe-10 w-fit rounded-md ${props.clr}`} >
+            {props.name}
+          </h2>
+        </div>
+        {/* <h2 className={`font-bold rounded-md text-center ${props.clr} ps-10 pe-10`} >{props.name}</h2> */}
         <cite id="desc">{props.description}</cite>
 
         {props.children}
