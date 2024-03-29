@@ -10,8 +10,9 @@ import ProjTaskBreakdown from "@/components/charts/ProjTaskBreakdown";
 import TasksTimeline from "@/components/charts/TasksTimeline";
 import { ProjectType, UserDetails } from "@/types";
 import UserContributions from "@/components/charts/UserContributions";
+import KanbanNav from "@/components/atoms/KanbanNav";
 
-const ProjectInsights = ({
+const ProjectStatistics = ({
   params,
 }: {
   params: { "project-details": string };
@@ -64,20 +65,48 @@ const ProjectInsights = ({
 
   return (
     <>
-      <PageHeader
-        title={
-          (project?.name || "Project") +
-          (creator ? " created by " + creator.username : "")
-        }
-      />
-      <h1>Tasks Breakdown</h1>
-      <ProjTaskBreakdown projectId={projectId} />
-      <h1>Completed Tasks Timeline</h1>
-      <TasksTimeline projectId={projectId} />
-      <h1>User Contributions</h1>
-      <UserContributions projectId={projectId} />
+      <div className="mb-4 flex flex-col">
+        <div className="flex flex-row place-items-end">
+          <h1 className="text-3xl text-gray-900 ml-2">{project?.name || ""}</h1>
+          <h4 className="text-md text-gray-500 ml-2">
+            {" Created by " + creator?.username}
+          </h4>
+        </div>
+        <hr className="border-gray-300 mt-2 w-full" />
+      </div>
+      <div className="flex flex-col gap-10">
+        <KanbanNav projectId={projectId} />
+        <div className="w-full flex flex-row">
+          <div className="w-full flex flex-col items-center gap-10">
+            <h1 className="text-3xl text-gray-900 ml-2 underline underline-offset-2">
+              Completed Tasks Timeline
+            </h1>
+            <TasksTimeline projectId={projectId} className={"w-full h-96"} />
+          </div>
+          <div className="w-full flex flex-col items-center gap-10">
+            <h1 className="text-3xl text-gray-900 ml-2 underline underline-offset-2">
+              Tasks Breakdown
+            </h1>
+            <ProjTaskBreakdown
+              projectId={projectId}
+              className={"w-full h-96 flex justify-center"}
+            />
+          </div>
+        </div>
+        <div>
+          <div className="flex flex-col gap-10 flex-1 items-center w-1/2">
+            <h1 className="text-3xl text-gray-900 ml-2 underline underline-offset-4">
+              User Contributions
+            </h1>
+            <UserContributions
+              projectId={projectId}
+              className={"w-full h-96 flex justify-center"}
+            />
+          </div>
+        </div>
+      </div>
     </>
   );
 };
 
-export default ProjectInsights;
+export default ProjectStatistics;

@@ -19,7 +19,7 @@ export default function TasksTimeline(props) {
     };
 
     fetchData();
-  }, []);
+  }, [props.projectId]);
 
   useEffect(() => {
     if (chartRef.current) {
@@ -62,7 +62,8 @@ export default function TasksTimeline(props) {
   }, [chartData]);
 
   return (
-    <div style={{ position: "relative", width: "1000px", height: "500px" }}>
+    // <div style={{ position: "relative", width: "1000px", height: "500px" }}>
+    <div className={props.className}>
       <canvas ref={chartRef}></canvas>
     </div>
   );

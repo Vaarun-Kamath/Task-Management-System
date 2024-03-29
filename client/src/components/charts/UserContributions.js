@@ -19,7 +19,7 @@ export default function UserContributions(props) {
     };
 
     fetchData();
-  }, []);
+  }, [props.projectId]);
 
   useEffect(() => {
     if (chartRef.current) {
@@ -35,18 +35,18 @@ export default function UserContributions(props) {
           labels: chartData.assignees,
           // ["Chocolate", "Vanilla", "Strawberry"],
           // chartData.labels,
-         
+
           datasets: [
             {
               label: "Completed Tasks",
               fillColor: "rgb(23, 203, 71, 0.7)",
-              data: chartData.completed
-          },
-          {
+              data: chartData.completed,
+            },
+            {
               label: "Pending Tasks",
               fillColor: "rgb(255, 202, 0, 0.7)",
-              data: chartData.pending
-          },
+              data: chartData.pending,
+            },
           ],
         },
         options: {
@@ -66,7 +66,8 @@ export default function UserContributions(props) {
   }, [chartData]);
 
   return (
-    <div style={{ position: "relative", width: "1000px", height: "500px" }}>
+    // <div style={{ position: "relative", width: "1000px", height: "500px" }}>
+    <div className={props.className}>
       <canvas ref={chartRef}></canvas>
     </div>
   );

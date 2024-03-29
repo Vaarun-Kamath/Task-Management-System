@@ -19,7 +19,7 @@ export default function ProjTaskBreakdown(props) {
     };
 
     fetchData();
-  }, []);
+  }, [props.projectId]);
 
   useEffect(() => {
     if (chartRef.current) {
@@ -64,7 +64,8 @@ export default function ProjTaskBreakdown(props) {
   }, [chartData]);
 
   return (
-    <div style={{ position: "relative", width: "500px", height: "500px" }}>
+    // <div style={{ position: "relative", width: "500px", height: "500px" }}>
+    <div className={props.className}>
       <canvas ref={chartRef}></canvas>
     </div>
   );
