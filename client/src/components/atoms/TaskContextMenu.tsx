@@ -1,4 +1,4 @@
-import React, { FocusEventHandler, useState } from "react";
+import React from "react";
 import { GrStatusDisabled } from "react-icons/gr";
 import { MdLowPriority, MdGroups } from "react-icons/md";
 import ContextMenu from "./ContextMenu";
@@ -22,6 +22,7 @@ function TaskContextMenu(props: {
           "flex border-2 items-center gap-2 px-4 py-1 rounded-sm hover:bg-gray-700 hover:text-white transition-all duration-200 w-full"
         }
         onClick={() => {
+          props.setContextMenuPosition(null);
           props.setShowStatusModal(props.task);
         }}
       >
@@ -35,6 +36,7 @@ function TaskContextMenu(props: {
           "flex border-2 items-center gap-2 px-4 py-1 rounded-sm hover:bg-gray-700 hover:text-white transition-all duration-200 w-full"
         }
         onClick={() => {
+          props.setContextMenuPosition(null);
           props.setShowPriorityModal(props.task);
         }}
       >
@@ -48,6 +50,7 @@ function TaskContextMenu(props: {
           "flex border-2 items-center gap-2 px-4 py-1 rounded-sm hover:bg-gray-700 hover:text-white transition-all duration-200 w-full"
         }
         onClick={() => {
+          props.setContextMenuPosition(null);
           props.setShowCollabModal(props.task);
         }}
       >

@@ -8,7 +8,7 @@ export function TaskCollab({
   task,
   project,
 }: {
-  setShowModal: Dispatch<SetStateAction<boolean>>;
+  setShowModal: () => void;
   task: Task;
   project: ProjectType;
 }) {

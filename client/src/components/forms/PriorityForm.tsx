@@ -46,6 +46,7 @@ export function PriorityForm(props: { callbackUrl?: string; task: Task }) {
         name="priority"
         type="number"
         pattern="[0-9]+"
+        placeholder="Enter Priority"
       />
 
       {taskError && (

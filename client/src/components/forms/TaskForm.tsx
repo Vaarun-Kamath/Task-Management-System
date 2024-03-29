@@ -109,6 +109,7 @@ export default function TaskForm(props: TaskFormProps) {
         name="priority"
         type="number"
         pattern="[0-9]+"
+        placeholder="Enter Priority"
       />
       <StyledOption
         className={"w-full p-2 my-3 border-gray-400 border"}

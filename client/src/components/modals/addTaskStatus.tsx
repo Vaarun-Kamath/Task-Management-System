@@ -7,7 +7,7 @@ export function TaskStatus({
   setShowModal,
   task,
 }: {
-  setShowModal: Dispatch<SetStateAction<boolean>>;
+  setShowModal: () => void;
   task: Task;
 }) {
   return (
