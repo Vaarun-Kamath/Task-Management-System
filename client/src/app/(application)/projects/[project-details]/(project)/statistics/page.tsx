@@ -10,7 +10,7 @@ import ProjTaskBreakdown from "@/components/charts/ProjTaskBreakdown";
 import TasksTimeline from "@/components/charts/TasksTimeline";
 import { ProjectType, UserDetails } from "@/types";
 import UserContributions from "@/components/charts/UserContributions";
-import KanbanNav from "@/components/atoms/KanbanNav";
+import KanbanNav from "@/components/nav/KanbanNav";
 
 const ProjectStatistics = ({
   params,
