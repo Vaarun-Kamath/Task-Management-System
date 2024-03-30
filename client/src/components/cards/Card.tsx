@@ -17,21 +17,22 @@ function timing(deadline: string) {
 
     // Find the highest non-zero unit
     if (weeksLeft !== 0) {
-      highestUnit = "weeks";
       value = weeksLeft;
+      highestUnit = "week";
     } else if (daysLeft !== 0) {
-      highestUnit = "days";
       value = daysLeft;
+      highestUnit = "day";
     } else if (hoursLeft !== 0) {
-      highestUnit = "hours";
       value = hoursLeft;
+      highestUnit = "hour";
     } else if (minsLeft !== 0) {
-      highestUnit = "minutes";
       value = minsLeft;
+      highestUnit = "minute";
     } else {
-      highestUnit = "seconds";
       value = secsLeft;
+      highestUnit = "second";
     }
+    highestUnit += ( value === 1 ) ? "" : "s";
   }
 
   return { highestUnit: highestUnit, value: value };

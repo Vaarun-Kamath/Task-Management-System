@@ -2,6 +2,7 @@ import { Task, UserDetails } from "@/types";
 import Card from "./Card";
 import { GetUserById } from "@/app/api/user/handler";
 import { useEffect, useState } from "react";
+import DynamicSwatch from "../atoms/DynamicSwatch";
 
 export function TaskCard(props: {
   data: Task;
@@ -38,13 +39,11 @@ export function TaskCard(props: {
       href={"#"}
     >
       {task.assigneeId && (
-        <p className="text-wrap line-clamp-1">
-          { collaborator?.username || task.assigneeId}
+        <p className="text-md text-gray-500 hover:text-gray-300 ml-2 text-wrap line-clamp-1">
+          {"Assignee: " + collaborator?.username || task.assigneeId}
         </p>
       )}
-      <div className="bg-green-500 w-0 h-0 opacity-0">@Kamath, y? pain?????</div>
-      <div className="bg-red-500 w-0 h-0 opacity-0">@Kamath, y? pain?????</div>
-      <div className="bg-orange-500 w-0 h-0 opacity-0">@Kamath, y? pain?????</div>
+      <DynamicSwatch />
     </Card>
   );
 }
