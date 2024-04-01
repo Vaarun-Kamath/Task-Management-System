@@ -11,6 +11,8 @@ import TasksTimeline from "@/components/charts/TasksTimeline";
 import { ProjectType, UserDetails } from "@/types";
 import UserContributions from "@/components/charts/UserContributions";
 import KanbanNav from "@/components/nav/KanbanNav";
+import ProjectHeader from "@/components/atoms/ProjectHeader";
+import ProjectNav from "@/components/nav/ProjectNav";
 
 const ProjectStatistics = ({
   params,
@@ -65,17 +67,9 @@ const ProjectStatistics = ({
 
   return (
     <>
-      <div className="mb-4 flex flex-col">
-        <div className="flex flex-row place-items-end">
-          <h1 className="text-3xl text-gray-900 ml-2">{project?.name || ""}</h1>
-          <h4 className="text-md text-gray-500 ml-2">
-            {" Created by " + creator?.username}
-          </h4>
-        </div>
-        <hr className="border-gray-300 mt-2 w-full" />
-      </div>
+      <ProjectHeader project={project} creator={creator}/>
       <div className="flex flex-col gap-10">
-        <KanbanNav projectId={projectId} />
+        <ProjectNav projectId={projectId} remove="statistics"/>
         <div className="w-full flex flex-row">
           <div className="w-full flex flex-col items-center gap-10">
             <h1 className="text-3xl text-gray-900 ml-2 underline underline-offset-2">
