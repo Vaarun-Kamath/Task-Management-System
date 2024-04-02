@@ -32,7 +32,7 @@ function timing(deadline: string) {
       value = secsLeft;
       highestUnit = "second";
     }
-    highestUnit += ( value === 1 ) ? "" : "s";
+    highestUnit += value === 1 ? "" : "s";
   }
 
   return { highestUnit: highestUnit, value: value };
@@ -63,7 +63,7 @@ export default function Card(props: {
     >
       <div onContextMenu={props.onContextMenu}>
         <div className={`font-bold justify-center flex text-center `}>
-          <h2 className={`ps-10 pe-10 w-fit rounded-md ${props.clr}`} >
+          <h2 className={`ps-10 pe-10 w-fit rounded-md ${props.clr}`}>
             {props.name}
           </h2>
         </div>

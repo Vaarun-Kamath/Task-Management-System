@@ -4,7 +4,6 @@ import { useLayoutEffect, useState } from "react";
 import { redirect, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { GetProjectById } from "@/app/api/project/handler";
-import PageHeader from "@/components/atoms/PageHeader";
 import { GetUserById } from "@/app/api/user/handler";
 import ProjTaskBreakdown from "@/components/charts/ProjTaskBreakdown";
 import TasksTimeline from "@/components/charts/TasksTimeline";
@@ -72,13 +71,13 @@ const ProjectStatistics = ({
         <ProjectNav projectId={projectId} remove="statistics"/>
         <div className="w-full flex flex-row">
           <div className="w-full flex flex-col items-center gap-10">
-            <h1 className="text-3xl text-gray-900 ml-2 underline underline-offset-2">
+            <h1 className="text-3xl text-gray-900 ml-2 underline underline-offset-4">
               Completed Tasks Timeline
             </h1>
             <TasksTimeline projectId={projectId} className={"w-full h-96"} />
           </div>
           <div className="w-full flex flex-col items-center gap-10">
-            <h1 className="text-3xl text-gray-900 ml-2 underline underline-offset-2">
+            <h1 className="text-3xl text-gray-900 ml-2 underline underline-offset-4">
               Tasks Breakdown
             </h1>
             <ProjTaskBreakdown

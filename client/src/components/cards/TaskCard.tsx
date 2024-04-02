@@ -13,21 +13,21 @@ export function TaskCard(props: {
   const clr =
     task.priority < 10 ? "green" : task.priority < 20 ? "orange" : "red";
 
-    useEffect(() => {
-      const fetchTaskData = async () => {
-        try {
-          if (task.assigneeId) {
-            const response = await GetUserById(task.assigneeId);
-            console.log(response, response.content); /////////////////
-            setCollaborator(response.content);
-          }
-        } catch (error) {
-          console.error("Error fetching data[Tasks]:", error);
+  useEffect(() => {
+    const fetchTaskData = async () => {
+      try {
+        if (task.assigneeId) {
+          const response = await GetUserById(task.assigneeId);
+          console.log(response, response.content); /////////////////
+          setCollaborator(response.content);
         }
-      };
-  
-      fetchTaskData();
-    }, [task.assigneeId]);
+      } catch (error) {
+        console.error("Error fetching data[Tasks]:", error);
+      }
+    };
+
+    fetchTaskData();
+  }, [task.assigneeId]);
 
   return (
     <Card

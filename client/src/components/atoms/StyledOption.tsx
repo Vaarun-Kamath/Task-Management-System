@@ -16,7 +16,8 @@ export default function StyledOption({
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (onChange) onChange(event);
   };
-  var optionValues:Array<string | number | readonly string[] | undefined> = values || options;
+  var optionValues: Array<string | number | readonly string[] | undefined> =
+    values || options;
   return (
     <>
       <label>Select an Option</label>
@@ -37,9 +38,7 @@ export default function StyledOption({
             {option}{" "}
           </option>
         ))}
-        <option value="">{" "}
-          None{" "}
-        </option>
+        <option value=""> None </option>
       </select>
     </>
   );

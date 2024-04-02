@@ -2,7 +2,7 @@ export default function AddButton(props: {
   onclick: () => void;
   text: string;
   icon: any;
-}){
+}) {
   return (
     <button
       className={

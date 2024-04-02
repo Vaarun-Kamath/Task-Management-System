@@ -1,4 +1,3 @@
-import Sidebar from "@/components/Sidebar";
 import PageHeader from "@/components/atoms/PageHeader";
 
 export default async function UserStatisticsLayout({

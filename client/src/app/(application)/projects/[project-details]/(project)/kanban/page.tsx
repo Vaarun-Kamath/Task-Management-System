@@ -11,7 +11,6 @@ import { ProjectType, Task, UserDetails } from "@/types";
 import { StatusList } from "@/constants/TaskStatus";
 import KanbanNav from "@/components/nav/KanbanNav";
 import ProjectHeader from "@/components/atoms/ProjectHeader";
-import ProjectNav from "@/components/nav/ProjectNav";
 
 export default function ProjectDetails({
   params,
@@ -80,7 +79,7 @@ export default function ProjectDetails({
 
   return (
     <>
-      <ProjectHeader project={project} creator={creator}/>
+      <ProjectHeader project={project} creator={creator} />
       {loading ? null : (
         <div className=" z-50 flex flex-col px-2 mb-4 gap-5 w-full items-center">
           <KanbanNav projectId={projectId} />
