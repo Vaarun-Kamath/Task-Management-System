@@ -3,6 +3,7 @@ import Card from "./Card";
 import { GetUserById } from "@/app/api/user/handler";
 import { useEffect, useState } from "react";
 import DynamicSwatch from "../atoms/DynamicSwatch";
+import { getColour } from "@/utils/helperFunctions";
 
 export function TaskCard(props: {
   data: Task;
@@ -10,8 +11,7 @@ export function TaskCard(props: {
 }) {
   const [collaborator, setCollaborator] = useState<UserDetails | null>(null);
   const task = props.data;
-  const clr =
-    task.priority < 10 ? "green" : task.priority < 20 ? "orange" : "red";
+  const clr = getColour(task.priority);
 
   useEffect(() => {
     const fetchTaskData = async () => {

@@ -20,6 +20,27 @@ export async function GetTasks(projectId: string | null | undefined) {
   }
 }
 
+export async function GetTasksSorted(
+  projectId: string | null | undefined,
+  marginOfError: number,
+) {
+  try {
+    const response = await axiosInstance.get(`${BACKEND_URL}/api/tasksSorted`, {
+      params: { projectId: projectId, marginOfError: marginOfError },
+    });
+    const { data } = response;
+    console.log(data);
+    return data;
+  } catch (error) {
+    return handleAxiosError(
+      error,
+      500,
+      'ERROR_GETTING_TASKS[sorted]',
+      'Please try again later.'
+    );
+  }
+}
+
 export async function GetTasksBreakdown(projectId: string | null | undefined) {
   try {
     const response = await axiosInstance.get(

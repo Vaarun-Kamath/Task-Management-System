@@ -1,8 +1,11 @@
 package com.workflow.server.controller;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,41 +32,6 @@ public class TaskController {
 
     // Get Mappings
 
-    // @CrossOrigin("http://localhost:3000")
-    // @PostMapping("/api/assignCollaborator")
-    // public ResponseEntity<Map<String, Object>> addAssignee(@RequestBody Map<String, String> request) {
-    //     try {
-    //         String userId = request.get("userId");
-    //         String taskId = request.get("taskId");
-    //         if (username == null) {
-    //             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-    //                     .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Username"));
-    //         }
-
-    //         User data = CheckUserCollaboration(username);
-
-    //         if (data.get_id() != null) {
-    //             boolean res = projectController.addCollaborator(projectId, data.get_id());
-    //             if (res) {
-    //                 return ResponseEntity.status(HttpStatus.OK)
-    //                         .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", new HashMap<>()));
-    //             } else {
-    //                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-    //                         .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(),
-    //                                 "User already collaborator or Project does not exist"));
-    //             }
-    //         } else {
-    //             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-    //                     .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
-    //         }
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //                 .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-    //                         "Internal server error"));
-    //     }
-    // }
-
     @GetMapping("/api/tasks")
     @CrossOrigin("http://localhost:3000")//* Done */
     public ResponseEntity<Map<String, Object>> getProjectTasks(@RequestParam String projectId) {
@@ -71,12 +39,64 @@ public class TaskController {
         if (projectId == null) {
             return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Something went wrong!! [Project missing]"));
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.BAD_REQUEST.value(), 
+                "Something went wrong!! [Project missing]"
+            ));
         }
 
         return ResponseEntity
         .status(HttpStatus.OK)
-        .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", taskrepo.findByProjectId(projectId)));
+        .body(CommonResponse.getSuccessResponse(
+            HttpStatus.OK.value(), 
+            "SUCCESS", 
+            taskrepo.findByProjectId(projectId)
+        ));
+    }
+
+    @GetMapping("/api/tasksSorted")
+    @CrossOrigin("http://localhost:3000")//* Done */
+    public ResponseEntity<Map<String, Object>> getTasksSorted(@RequestParam String projectId, @RequestParam long marginOfError) {
+
+        if (projectId == null) {
+            return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.BAD_REQUEST.value(), 
+                "Something went wrong!! [Project missing]"
+            ));
+        }
+
+        List<Task> taskList = taskrepo.findByProjectId(projectId);
+        taskList.sort(Comparator.comparing(
+            tsk -> ((Task)tsk).getCreatedOn().getTime()
+        ));
+
+        List<List<Task>> resultGrid = new ArrayList<>();
+        for (Task task : taskList) {
+            boolean isAdded = false;
+            for (List<Task> rowList : resultGrid) {
+                Task lastTask = rowList.get(rowList.size() - 1);
+                if (task.getCreatedOn().getTime() >= lastTask.getDueDate().getTime() + marginOfError) {
+                    rowList.add(task);
+                    isAdded = true;
+                    break;
+                }
+            }
+            if (!isAdded) {
+                resultGrid.add( new ArrayList<>(){ {
+                    add(task);
+                } });
+            }
+        }
+
+        return ResponseEntity
+        .status(HttpStatus.OK)
+        .body(CommonResponse.getSuccessResponse(
+            HttpStatus.OK.value(), 
+            "SUCCESS", 
+            resultGrid
+        ));
     }
 
     // Post mappings
@@ -93,19 +113,29 @@ public class TaskController {
             if (title == null || createdBy == null || createdOn == null) {
                 return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing name, createdOn or createdBy"));
+                .body(CommonResponse.getErrorResponse(
+                    HttpStatus.BAD_REQUEST.value(), 
+                    "Missing name, createdOn or createdBy"
+                ));
             }
 
             taskrepo.insert(newTask);
             return ResponseEntity
             .status(HttpStatus.OK)
-            .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", newTask));
+            .body(CommonResponse.getSuccessResponse(
+                HttpStatus.OK.value(), 
+                "Success", 
+                newTask
+            ));
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(), 
+                "Internal server error"
+            ));
         }
     }
 
@@ -119,7 +149,10 @@ public class TaskController {
         if (optionalTask.isEmpty()) {
             return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Something went wrong!! [TASK missing]"));
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.BAD_REQUEST.value(), 
+                "Something went wrong!! [TASK missing]"
+            ));
         }
         Task task = optionalTask.get();
         task.setStatus(updatedTask.getStatus());
@@ -130,7 +163,11 @@ public class TaskController {
 
         return ResponseEntity
         .status(HttpStatus.OK)
-        .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", savedTask));
+        .body(CommonResponse.getSuccessResponse(
+            HttpStatus.OK.value(), 
+            "Success", 
+            savedTask
+        ));
     }
 
 }
