@@ -9,5 +9,4 @@ import com.workflow.server.model.Task;
 
 public interface TaskRepository extends MongoRepository<Task,String>{
     List<Task> findByProjectId(String projectId);
-    Task save(Task updatedTask);
 }
