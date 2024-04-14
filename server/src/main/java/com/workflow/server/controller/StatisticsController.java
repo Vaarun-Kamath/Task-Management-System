@@ -73,47 +73,47 @@ public class StatisticsController {
                 .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", resobj));
     }
 
-    @GetMapping("/api/usercontributions")
-    @CrossOrigin("http://localhost:3000")//* Done */
-    public ResponseEntity<Map<String, Object>> getUserContributions(@RequestParam String projectId) {
+    // @GetMapping("/api/usercontributions")
+    // @CrossOrigin("http://localhost:3000")//* Done */
+    // public ResponseEntity<Map<String, Object>> getUserContributions(@RequestParam String projectId) {
 
-        if (projectId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Something went wrong!! [Project missing]"));
-        }
+    //     if (projectId == null) {
+    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    //                 .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Something went wrong!! [Project missing]"));
+    //     }
         
-        List<Statistics> tasks = statrepo.findByProjectId(projectId);
-        // System.out.println("Tasks: "+ tasks);
+    //     List<Statistics> tasks = statrepo.findByProjectId(projectId);
+    //     // System.out.println("Tasks: "+ tasks);
        
-        HashMap<String, Object> resobj = new HashMap<>(); 
-        List<String> assignees = new ArrayList<>();
-        List<Integer> completedTasks = new ArrayList<>();
-        List<Integer> pendingTasks = new ArrayList<>();
-        for (Task i: tasks){
-          String assignee_id = i.getAssigneeId();
-          if(assignee_id.equals("")){ continue; }
-          String assignee = usercontroller.getUserName(assignee_id);
+    //     HashMap<String, Object> resobj = new HashMap<>(); 
+    //     List<String> assignees = new ArrayList<>();
+    //     List<Integer> completedTasks = new ArrayList<>();
+    //     List<Integer> pendingTasks = new ArrayList<>();
+    //     for (Task i: tasks){
+    //       String assignee_id = i.getAssigneeId();
+    //       if(assignee_id.equals("")){ continue; }
+    //       String assignee = usercontroller.getUserName(assignee_id);
           
-          int assigneeIndex = assignees.indexOf(assignee);
-          boolean completed = i.getStatus().equals("DONE");
-          if (assigneeIndex == -1) {
-            assignees.add(assignee);
-            completedTasks.add(completed ? 1 : 0);
-            pendingTasks.add(completed ? 0 : 1);
-          } else {
-            int countIndex = completed ? completedTasks.get(assigneeIndex) : pendingTasks.get(assigneeIndex);
-            (completed ? completedTasks : pendingTasks).set(assigneeIndex, countIndex + 1);
-          }
-      }
+    //       int assigneeIndex = assignees.indexOf(assignee);
+    //       boolean completed = i.getStatus().equals("DONE");
+    //       if (assigneeIndex == -1) {
+    //         assignees.add(assignee);
+    //         completedTasks.add(completed ? 1 : 0);
+    //         pendingTasks.add(completed ? 0 : 1);
+    //       } else {
+    //         int countIndex = completed ? completedTasks.get(assigneeIndex) : pendingTasks.get(assigneeIndex);
+    //         (completed ? completedTasks : pendingTasks).set(assigneeIndex, countIndex + 1);
+    //       }
+    //   }
       
-      resobj.put("assignees", assignees);
-      resobj.put("completed", completedTasks);
-      resobj.put("pending", pendingTasks);
+    //   resobj.put("assignees", assignees);
+    //   resobj.put("completed", completedTasks);
+    //   resobj.put("pending", pendingTasks);
 
-      System.out.println(resobj);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", resobj));
-    }
+    //   System.out.println(resobj);
+    //     return ResponseEntity.status(HttpStatus.OK)
+    //             .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", resobj));
+    // }
     
 
     @GetMapping("/api/taskstimeline")

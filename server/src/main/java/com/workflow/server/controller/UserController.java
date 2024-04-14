@@ -1,8 +1,6 @@
 package com.workflow.server.controller;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,92 +12,85 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.workflow.server.UserRepository;
+import com.workflow.server.exceptions.UserAlreadyCollaboratorException;
+import com.workflow.server.exceptions.UserIsProjectCreatorException;
+import com.workflow.server.exceptions.UserNotFoundException;
 import com.workflow.server.model.User;
+import com.workflow.server.services.ProjectService;
+import com.workflow.server.services.UserService;
 import com.workflow.server.utils.CommonResponse;
 
 @RestController
 public class UserController {
 
     @Autowired
-    private UserRepository userRepo;
-
+    private UserService userService;
 
     // To communicate with Project Controller
     @Autowired
-    ProjectController projectController;
+    private ProjectService projectService;
 
 
     @GetMapping("/api/userById") //TODO dont send password.currently sends name, email and password as well
     @CrossOrigin("http://localhost:3000")
     public ResponseEntity<Map<String, Object>> getUserById(@RequestParam String userId) {
 
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing User ID"));
-        }
+        try {
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing User ID"));
+            }
 
-        Optional<User> userOptional = userRepo.findById(userId);
+            User user = userService.getUserById(userId);
 
-        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", user));
+        
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
+                    .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
         }
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", userOptional.get()));
     }
 
-    // @CrossOrigin("http://localhost:3000")
-    // @PostMapping("/api/addCollaborator")
-    // public ResponseEntity<Map<String, Object>> addCollaborator(@RequestBody Map<String, String> request) {
-    //     try {
-    //         String username = request.get("username");
-    //         String projectId = request.get("projectId");
-    //         if (username == null) {
-    //             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-    //                     .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Username"));
-    //         }
+    @CrossOrigin("http://localhost:3000")
+    @PostMapping("/api/addCollaborator")
+    public ResponseEntity<Map<String, Object>> addCollaborator(@RequestBody Map<String, String> request) {
+        try {
+            String username = request.get("username");
+            String projectId = request.get("projectId");
 
-    //         User data = CheckUserCollaboration(username);
+            if (username == null || projectId == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Username or project ID"));
+            }
 
-    //         System.out.println();
+            User data = userService.getUserByUsername(username);
 
-    //         if (data != null && data.get_id() != null) {
-    //             HashMap<String, Object> res = projectController.addCollaborator(projectId, data.get_id());
-    //             if (res.get("status").equals(200)) {
-    //                 return ResponseEntity.status(HttpStatus.OK)
-    //                         .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", res));
-    //             } else {
-    //                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-    //                         .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(),
-    //                                 (String) res.get("message")));
-    //             }
-    //         } else {
-    //             System.out.println("\n\n\n" + "RESPONSE:" + ResponseEntity.status(HttpStatus.NOT_FOUND)
-    //                     .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found")) + "\n\n\n");
-    //             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-    //                     .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
-    //         }
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //                 .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-    //                         "Internal server error"));
-    //     }
-    // }
+            projectService.addCollaborator(projectId, data.get_id());
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", "res"));
 
-    private User CheckUserCollaboration(String username) {
-        return userRepo.findByUsername(username);
-    }
-
-    public String getUserName(String id){
-        if(id == null){
-            return "";
+        } catch (UserAlreadyCollaboratorException | UserIsProjectCreatorException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
         }
-        Optional<User> result = userRepo.findById(id);
-        User user = result.get();
-        String username = user.getUsername();
-        return username;
     }
 }
