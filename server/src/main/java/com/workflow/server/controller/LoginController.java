@@ -11,21 +11,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.workflow.server.UserRepository;
+// import com.workflow.server.UserRepository;
 import com.workflow.server.model.User;
+import com.workflow.server.services.LoginService;
 import com.workflow.server.utils.CommonResponse;
 
 @RestController
 public class LoginController {
 
     @Autowired
-    private UserRepository userRepo;
+    private LoginService loginService;
 
 
     @CrossOrigin("http://localhost:3000")
     @PostMapping("/api/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> request) {
-        System.out.println("LoginController.login() called");
+
         try {
             String email = request.get("email");
             String password = request.get("password");
@@ -34,28 +35,41 @@ public class LoginController {
                         .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing email or password"));
             }
 
-            User data = CheckLogin(email);
-            System.out.println(data);
+            // User data = CheckLogin(email);
+            // System.out.println(data);
+            User user = loginService.authenticateUser(email, password);
 
-            if (data.get_id() != null) {
-                String storedPassword = (String) data.getPassword();
-                if (password.equals(storedPassword)) {
+            if(user == null)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(CommonResponse.getErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Incorrect credentials"));
 
-                    Map<String, Object> user = new HashMap<>();
-                    user.put("user_id", data.get_id());
-                    user.put("email", data.getEmail());
-                    user.put("username", data.getUsername());
 
-                    return ResponseEntity.status(HttpStatus.OK)
-                            .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", user));
-                } else {
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                            .body(CommonResponse.getErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Incorrect credentials"));
-                }
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
-            }
+            Map<String, Object> userResponse = new HashMap<>();
+            userResponse.put("user_id", user.get_id());
+            userResponse.put("email", user.getEmail());
+            userResponse.put("username", user.getUsername());
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", userResponse));            
+            // if (data.get_id() != null) {
+            //     String storedPassword = (String) data.getPassword();
+            //     if (password.equals(storedPassword)) {
+
+            //         Map<String, Object> user = new HashMap<>();
+            //         user.put("user_id", data.get_id());
+            //         user.put("email", data.getEmail());
+            //         user.put("username", data.getUsername());
+
+            //         return ResponseEntity.status(HttpStatus.OK)
+            //                 .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", user));
+            //     } else {
+            //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            //                 .body(CommonResponse.getErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Incorrect credentials"));
+            //     }
+            // } else {
+            //     return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            //             .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
+            // }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -63,23 +77,23 @@ public class LoginController {
         }
     }
 
-    public User CheckLogin(String email) {
+    // public User CheckLogin(String email) {
 
-        User data = new User();
+    //     User data = new User();
 
-        userRepo.findAll().forEach(user -> {
-            try {
-                if (user.getEmail().equals(email)) {
-                    data.set_id(user.get_id());
-                    data.setEmail(user.getEmail());
-                    data.setUsername(user.getUsername());
-                    data.setPassword(user.getPassword());
-                }
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
-            }
-        });
-        return data;
-    }
+    //     userRepo.findAll().forEach(user -> {
+    //         try {
+    //             if (user.getEmail().equals(email)) {
+    //                 data.set_id(user.get_id());
+    //                 data.setEmail(user.getEmail());
+    //                 data.setUsername(user.getUsername());
+    //                 data.setPassword(user.getPassword());
+    //             }
+    //         } catch (Exception e) {
+    //             System.out.println("Error: " + e);
+    //         }
+    //     });
+    //     return data;
+    // }
 
 }

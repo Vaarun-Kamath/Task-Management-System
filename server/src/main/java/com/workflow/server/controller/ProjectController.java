@@ -99,7 +99,6 @@ public class ProjectController {
         try {
             if (proj_id == null || collab_id == null)
                 return getCollabErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing project or collaborator ID");
-            System.out.println(proj_id + " : " + collab_id);
 
             Optional<Project> projectOptional = projrepo.findById(proj_id);
 
