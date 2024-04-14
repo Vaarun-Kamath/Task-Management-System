@@ -50,44 +50,44 @@ public class UserController {
                 .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", userOptional.get()));
     }
 
-    @CrossOrigin("http://localhost:3000")
-    @PostMapping("/api/addCollaborator")
-    public ResponseEntity<Map<String, Object>> addCollaborator(@RequestBody Map<String, String> request) {
-        try {
-            String username = request.get("username");
-            String projectId = request.get("projectId");
-            if (username == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Username"));
-            }
+    // @CrossOrigin("http://localhost:3000")
+    // @PostMapping("/api/addCollaborator")
+    // public ResponseEntity<Map<String, Object>> addCollaborator(@RequestBody Map<String, String> request) {
+    //     try {
+    //         String username = request.get("username");
+    //         String projectId = request.get("projectId");
+    //         if (username == null) {
+    //             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    //                     .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Username"));
+    //         }
 
-            User data = CheckUserCollaboration(username);
+    //         User data = CheckUserCollaboration(username);
 
-            System.out.println();
+    //         System.out.println();
 
-            if (data != null && data.get_id() != null) {
-                HashMap<String, Object> res = projectController.addCollaborator(projectId, data.get_id());
-                if (res.get("status").equals(200)) {
-                    return ResponseEntity.status(HttpStatus.OK)
-                            .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", res));
-                } else {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(),
-                                    (String) res.get("message")));
-                }
-            } else {
-                System.out.println("\n\n\n" + "RESPONSE:" + ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found")) + "\n\n\n");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                            "Internal server error"));
-        }
-    }
+    //         if (data != null && data.get_id() != null) {
+    //             HashMap<String, Object> res = projectController.addCollaborator(projectId, data.get_id());
+    //             if (res.get("status").equals(200)) {
+    //                 return ResponseEntity.status(HttpStatus.OK)
+    //                         .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", res));
+    //             } else {
+    //                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    //                         .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(),
+    //                                 (String) res.get("message")));
+    //             }
+    //         } else {
+    //             System.out.println("\n\n\n" + "RESPONSE:" + ResponseEntity.status(HttpStatus.NOT_FOUND)
+    //                     .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found")) + "\n\n\n");
+    //             return ResponseEntity.status(HttpStatus.NOT_FOUND)
+    //                     .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
+    //         }
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //                 .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+    //                         "Internal server error"));
+    //     }
+    // }
 
     private User CheckUserCollaboration(String username) {
         return userRepo.findByUsername(username);
