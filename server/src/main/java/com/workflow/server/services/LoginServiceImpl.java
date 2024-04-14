@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.workflow.server.UserRepository;
+import com.workflow.server.exceptions.AuthenticationException;
+import com.workflow.server.exceptions.UserNotFoundException;
 import com.workflow.server.model.User;
 
 @Service
@@ -16,8 +18,7 @@ public class LoginServiceImpl implements LoginService{
     public User checkLogin(String email) {
         User user = userRepo.findByEmail(email);
         if(user == null)
-            // User is not in database
-            return null;
+            throw new UserNotFoundException("User with email: " + email + " not found");
         return user;
     }
 
@@ -29,6 +30,6 @@ public class LoginServiceImpl implements LoginService{
             return user;
         }
         // User authentication failed
-        return null;
+        throw new AuthenticationException("Incorrect credentials");
     }
 }
