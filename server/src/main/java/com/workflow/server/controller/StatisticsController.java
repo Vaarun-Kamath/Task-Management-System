@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.workflow.server.exceptions.AbstractException;
+import com.workflow.server.exceptions.AbstractHttpException;
 import com.workflow.server.services.StatisticsService;
 import com.workflow.server.utils.CommonResponse;
 
@@ -29,30 +29,24 @@ public class StatisticsController {
 
       try {
         if (projectId == null) {
-            return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(CommonResponse.getErrorResponse(
+            return CommonResponse.getErrorResponseEntity(
                 HttpStatus.BAD_REQUEST,
                 "Something went wrong!! [Project missing]"
-            ));
+            );
         }
 
         HashMap<String, Object> resobj = statisticsService.getProjectTasksBreakdown(projectId);
 
-        return ResponseEntity
-        .status(HttpStatus.OK)
-        .body(CommonResponse.getSuccessResponse(
+        return CommonResponse.getSuccessResponseEntity(
             HttpStatus.OK,
             "SUCCESS", resobj
-        ));
+        );
 
       } catch (Exception e) {
-        return ResponseEntity
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(CommonResponse.getErrorResponse(
+        return CommonResponse.getErrorResponseEntity(
             HttpStatus.INTERNAL_SERVER_ERROR,
             "Internal Server Error"
-        ));
+        );
       }
     }
 
@@ -62,33 +56,27 @@ public class StatisticsController {
       try {
 
         if (projectId == null) {
-            return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(CommonResponse.getErrorResponse(
+            return CommonResponse.getErrorResponseEntity(
                 HttpStatus.BAD_REQUEST,
                 "Something went wrong!! [Project missing]"
-            ));
+            );
         }
        
         HashMap<String, Object> resobj = statisticsService.getUserContributions(projectId); 
 
-        return ResponseEntity
-        .status(HttpStatus.OK)
-        .body(CommonResponse.getSuccessResponse(
+        return CommonResponse.getSuccessResponseEntity(
             HttpStatus.OK,
             "SUCCESS", resobj
-        ));
+        );
 
-      } catch (AbstractException e) {
-        return e.getErrorResponse();
+      } catch (AbstractHttpException e) {
+        return e.asErrorResponseEntity();
 
       } catch (Exception e) {
-        return ResponseEntity
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(CommonResponse.getErrorResponse(
+        return CommonResponse.getErrorResponseEntity(
             HttpStatus.INTERNAL_SERVER_ERROR,
             "Internal Server Error"
-        ));
+        );
       }
     }
     
@@ -99,33 +87,27 @@ public class StatisticsController {
       try {
 
         if (projectId == null) {
-            return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(CommonResponse.getErrorResponse(
+            return CommonResponse.getErrorResponseEntity(
                 HttpStatus.BAD_REQUEST,
                 "Something went wrong!! [Project missing]"
-            ));
+            );
         }
 
         HashMap<String, Object> resobj = statisticsService.getTasksTimeline(projectId); 
 
-        return ResponseEntity
-        .status(HttpStatus.OK)
-        .body(CommonResponse.getSuccessResponse(
+        return CommonResponse.getSuccessResponseEntity(
             HttpStatus.OK,
             "SUCCESS", resobj
-        ));
+        );
 
-      } catch (AbstractException e) {
-        return e.getErrorResponse();
+      } catch (AbstractHttpException e) {
+        return e.asErrorResponseEntity();
         
       } catch (Exception e) {
-        return ResponseEntity
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(CommonResponse.getErrorResponse(
+        return CommonResponse.getErrorResponseEntity(
             HttpStatus.INTERNAL_SERVER_ERROR,
             "Internal Server Error"
-        ));
+        );
       }
     }   
 }

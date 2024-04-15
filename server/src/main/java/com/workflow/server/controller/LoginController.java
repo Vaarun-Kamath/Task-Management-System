@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.workflow.server.exceptions.AbstractException;
+import com.workflow.server.exceptions.AbstractHttpException;
 import com.workflow.server.model.User;
 import com.workflow.server.services.LoginService;
 import com.workflow.server.utils.CommonResponse;
@@ -28,12 +28,10 @@ public class LoginController {
 
         try {
             if (request == null) {
-                return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(CommonResponse.getErrorResponse(
+                return CommonResponse.getErrorResponseEntity(
                     HttpStatus.BAD_REQUEST,
                     "Missing request body"
-                ));
+                );
             }
 
             String email = request.get("email");
@@ -46,24 +44,20 @@ public class LoginController {
             userResponse.put("email", user.getEmail());
             userResponse.put("username", user.getUsername());
 
-            return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(CommonResponse.getSuccessResponse(
+            return CommonResponse.getSuccessResponseEntity(
                 HttpStatus.OK,
                 "Success",
                 userResponse
-            ));
+            );
 
-        } catch (AbstractException e) {
-            return e.getErrorResponse();
+        } catch (AbstractHttpException e) {
+            return e.asErrorResponseEntity();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(CommonResponse.getErrorResponse(
+            return CommonResponse.getErrorResponseEntity(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "Internal server error"
-            ));
+            );
         }
     }
 }

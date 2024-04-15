@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.workflow.server.exceptions.AbstractException;
+import com.workflow.server.exceptions.AbstractHttpException;
 import com.workflow.server.model.User;
 import com.workflow.server.services.ProjectService;
 import com.workflow.server.services.UserService;
@@ -35,25 +35,29 @@ public class UserController {
 
         try {
             if (userId == null) {
-                return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST, "Missing User ID"));
+                return CommonResponse.getErrorResponseEntity(
+                    HttpStatus.BAD_REQUEST,
+                    "Missing User ID"
+                );
             }
 
             User user = userService.getUserById(userId);
 
-            return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(CommonResponse.getSuccessResponse(HttpStatus.OK, "SUCCESS", user));
+            return CommonResponse.getSuccessResponseEntity(
+                HttpStatus.OK,
+                "SUCCESS",
+                user
+            );
         
-        } catch (AbstractException e) {
+        } catch (AbstractHttpException e) {
             e.printStackTrace();
-            return e.getErrorResponse();
+            return e.asErrorResponseEntity();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"));
+            return CommonResponse.getErrorResponseEntity(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal server error"
+            );
         }
     }
 
@@ -62,9 +66,10 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> addCollaborator(@RequestBody Map<String, String> request) {
         try {
             if (request == null) {
-                return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST, "Missing request body"));
+                return CommonResponse.getErrorResponseEntity(
+                    HttpStatus.BAD_REQUEST,
+                    "Missing request body"
+                );
             }
 
             String username = request.get("username");
@@ -72,18 +77,21 @@ public class UserController {
             User data = userService.getUserByUsername(username);
             projectService.addCollaborator(projectId, data.get_id());
             
-            return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(CommonResponse.getSuccessResponse(HttpStatus.OK, "Success", "res"));
+            return CommonResponse.getSuccessResponseEntity(
+                HttpStatus.OK,
+                "Success",
+                "res"
+            );
 
-        } catch (AbstractException e) {
+        } catch (AbstractHttpException e) {
             e.printStackTrace();
-            return e.getErrorResponse();
+            return e.asErrorResponseEntity();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"));
+            return CommonResponse.getErrorResponseEntity(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal server error"
+            );
         }
     }
 }

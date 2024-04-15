@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.workflow.server.exceptions.AbstractException;
+import com.workflow.server.exceptions.AbstractHttpException;
 import com.workflow.server.model.Task;
 import com.workflow.server.services.TaskService;
 import com.workflow.server.utils.CommonResponse;
@@ -33,30 +33,24 @@ public class TaskController {
     public ResponseEntity<Map<String, Object>> getProjectTasks(@RequestParam String projectId) {
         try {
             if (projectId == null) {
-                return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(CommonResponse.getErrorResponse(
+                return CommonResponse.getErrorResponseEntity(
                     HttpStatus.BAD_REQUEST, 
                     "Something went wrong!! [Project missing]"
-                ));
+                );
             }
     
-            return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(CommonResponse.getSuccessResponse(
+            return CommonResponse.getSuccessResponseEntity(
                 HttpStatus.OK, 
                 "SUCCESS", 
                 taskService.getProjectTasks(projectId)
-            ));
+            );
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(CommonResponse.getErrorResponse(
+            return CommonResponse.getErrorResponseEntity(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "Internal server error"
-            ));
+            );
         }
     }
 
@@ -66,32 +60,26 @@ public class TaskController {
 
         try {
             if (projectId == null) {
-                return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(CommonResponse.getErrorResponse(
+                return CommonResponse.getErrorResponseEntity(
                     HttpStatus.BAD_REQUEST, 
                     "Something went wrong!! [Project missing]"
-                ));
+                );
             }
 
             List<Task> taskList = taskService.getProjectTasks(projectId);
 
-            return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(CommonResponse.getSuccessResponse(
+            return CommonResponse.getSuccessResponseEntity(
                 HttpStatus.OK, 
                 "SUCCESS", 
                 taskService.getTasksSorted(taskList, marginOfError)
-            ));
+            );
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(CommonResponse.getErrorResponse(
+            return CommonResponse.getErrorResponseEntity(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "Internal server error"
-            ));
+            );
         }
     }
 
@@ -102,35 +90,29 @@ public class TaskController {
     public ResponseEntity<Map<String, Object>> addProjects(@RequestBody Task newTask) {
         try {
             if (newTask == null) {
-                return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(CommonResponse.getErrorResponse(
+                return CommonResponse.getErrorResponseEntity(
                     HttpStatus.BAD_REQUEST, 
                     "Missing Task"
-                ));
+                );
             }
 
             Task addedTask = taskService.addTask(newTask);
-            return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(CommonResponse.getSuccessResponse(
+            return CommonResponse.getSuccessResponseEntity(
                 HttpStatus.OK, 
                 "Success", 
                 addedTask
-            ));
+            );
 
-        } catch (AbstractException e) {
+        } catch (AbstractHttpException e) {
             e.printStackTrace();
-            return e.getErrorResponse();
+            return e.asErrorResponseEntity();
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(CommonResponse.getErrorResponse(
+            return CommonResponse.getErrorResponseEntity(
                 HttpStatus.INTERNAL_SERVER_ERROR, 
                 "Internal server error"
-            ));
+            );
         }
     }
 
@@ -141,33 +123,27 @@ public class TaskController {
     public ResponseEntity<Map<String,Object>> updateTask(@PathVariable String taskId, @RequestBody Task updatedTask) {
         try {
             if(taskId == null || updatedTask == null) {
-                return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(CommonResponse.getErrorResponse(
+                return CommonResponse.getErrorResponseEntity(
                     HttpStatus.BAD_REQUEST,
                     "Something went wrong!! [Project or updated Task missing]"
-                ));
+                );
             }
 
             Task savedTask = taskService.updateTask(taskId, updatedTask);
 
-            return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(CommonResponse.getSuccessResponse(
+            return CommonResponse.getSuccessResponseEntity(
                 HttpStatus.OK, 
                 "Success", 
                 savedTask
-            ));
-        } catch (AbstractException e) {
-            return e.getErrorResponse();
+            );
+        } catch (AbstractHttpException e) {
+            return e.asErrorResponseEntity();
 
         } catch (Exception e) {
-            return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(CommonResponse.getErrorResponse(
+            return CommonResponse.getErrorResponseEntity(
                 HttpStatus.INTERNAL_SERVER_ERROR, 
                 "Internal Server Error"
-            ));
+            );
         }
     }
 }

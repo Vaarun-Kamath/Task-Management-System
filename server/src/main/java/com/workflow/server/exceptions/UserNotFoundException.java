@@ -5,13 +5,12 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class UserNotFoundException extends AbstractException {
+public class UserNotFoundException extends AbstractHttpException {
     public UserNotFoundException(String message) {
         super(message);
     }
 
-    public ResponseEntity<Map<String, Object>> getErrorResponse() {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(getResponse(HttpStatus.NOT_FOUND.value(), getMessage()));
+    public ResponseEntity<Map<String, Object>> asErrorResponseEntity() {
+        return getResponseEntity(HttpStatus.NOT_FOUND);
     }
 }
