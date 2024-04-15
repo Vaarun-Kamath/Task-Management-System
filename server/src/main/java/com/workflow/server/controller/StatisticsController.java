@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.workflow.server.exceptions.AbstractException;
 import com.workflow.server.services.StatisticsService;
 import com.workflow.server.utils.CommonResponse;
 
@@ -58,9 +59,9 @@ public class StatisticsController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", resobj));
 
-      } catch (IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+      } catch (AbstractException e) {
+        return e.getErrorResponse();
+
       } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error"));
@@ -83,9 +84,9 @@ public class StatisticsController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", resobj));
 
-      } catch (IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+      } catch (AbstractException e) {
+        return e.getErrorResponse();
+        
       } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error"));

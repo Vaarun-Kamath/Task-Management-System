@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.workflow.server.exceptions.UserAlreadyCollaboratorException;
-import com.workflow.server.exceptions.UserNotFoundException;
+import com.workflow.server.exceptions.AbstractException;
 import com.workflow.server.model.User;
 import com.workflow.server.services.ProjectService;
 import com.workflow.server.services.UserService;
@@ -45,10 +44,9 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", user));
         
-        } catch (UserNotFoundException e) {
+        } catch (AbstractException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+            return e.getErrorResponse();
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -73,14 +71,9 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", "res"));
 
-        } catch (UserAlreadyCollaboratorException | IllegalArgumentException e) {
+        } catch (AbstractException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+            return e.getErrorResponse();
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

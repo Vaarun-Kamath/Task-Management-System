@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.workflow.server.exceptions.AuthenticationException;
-import com.workflow.server.exceptions.UserNotFoundException;
+import com.workflow.server.exceptions.AbstractException;
 import com.workflow.server.model.User;
 import com.workflow.server.services.LoginService;
 import com.workflow.server.utils.CommonResponse;
@@ -46,15 +45,8 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", userResponse));            
 
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        } catch (AbstractException e) {
+            return e.getErrorResponse();
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

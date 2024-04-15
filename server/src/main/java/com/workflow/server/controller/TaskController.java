@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.workflow.server.exceptions.TaskNotFoundException;
+import com.workflow.server.exceptions.AbstractException;
 import com.workflow.server.model.Task;
 import com.workflow.server.services.TaskService;
 import com.workflow.server.utils.CommonResponse;
@@ -111,14 +111,10 @@ public class TaskController {
                 addedTask
             ));
 
-        } catch (IllegalArgumentException e) {
+        } catch (AbstractException e) {
             e.printStackTrace();
-            return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(CommonResponse.getErrorResponse(
-                HttpStatus.BAD_REQUEST.value(), 
-                e.getMessage()
-            ));
+            return e.getErrorResponse();
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity
@@ -154,13 +150,9 @@ public class TaskController {
                 "Success", 
                 savedTask
             ));
-        } catch (TaskNotFoundException e) {
-            return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(CommonResponse.getErrorResponse(
-                HttpStatus.BAD_REQUEST.value(), 
-                e.getMessage()
-            ));
+        } catch (AbstractException e) {
+            return e.getErrorResponse();
+
         } catch (Exception e) {
             return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
