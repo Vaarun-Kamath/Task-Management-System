@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.workflow.server.ProjectRepository;
 import com.workflow.server.exceptions.ProjectNotFoundException;
 import com.workflow.server.exceptions.UserAlreadyCollaboratorException;
-import com.workflow.server.exceptions.UserIsProjectCreatorException;
 import com.workflow.server.model.Project;
 
 @Service
@@ -53,10 +52,6 @@ public class ProjectServiceImpl implements ProjectService{
             throw new IllegalArgumentException("Missing project or collaborator ID");
 
         Project project = getProjectById(projId);
-
-        if (project.getCreatedBy().equals(collabId))
-            throw new UserIsProjectCreatorException("User with id: " + collabId + " is the creator of the project with id: " + projId);
-
         Set<String> collaborators = project.getCollaborators();
 
         if (collaborators.contains(collabId))

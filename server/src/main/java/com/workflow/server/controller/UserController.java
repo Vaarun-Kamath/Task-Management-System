@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.workflow.server.exceptions.UserAlreadyCollaboratorException;
-import com.workflow.server.exceptions.UserIsProjectCreatorException;
 import com.workflow.server.exceptions.UserNotFoundException;
 import com.workflow.server.model.User;
 import com.workflow.server.services.ProjectService;
@@ -74,7 +73,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", "res"));
 
-        } catch (UserAlreadyCollaboratorException | UserIsProjectCreatorException | IllegalArgumentException e) {
+        } catch (UserAlreadyCollaboratorException | IllegalArgumentException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
