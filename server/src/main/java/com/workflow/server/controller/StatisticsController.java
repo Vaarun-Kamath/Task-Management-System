@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.workflow.server.exceptions.UserNotFoundException;
 import com.workflow.server.services.StatisticsService;
 import com.workflow.server.utils.CommonResponse;
 
@@ -21,8 +20,6 @@ public class StatisticsController {
     @Autowired
     private StatisticsService statisticsService;
 
-    @Autowired
-    UserController usercontroller;
     // Get Mappings
 
     @GetMapping("/api/tasksbreakdown")
@@ -61,9 +58,6 @@ public class StatisticsController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", resobj));
 
-      } catch (UserNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
       } catch (IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
@@ -75,7 +69,7 @@ public class StatisticsController {
     
 
     @GetMapping("/api/taskstimeline")
-    @CrossOrigin("http://localhost:3000")//* Done */
+    @CrossOrigin("http://localhost:3000")
     public ResponseEntity<Map<String, Object>> getTasksTimeline(@RequestParam String projectId) {
       try {
 

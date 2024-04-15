@@ -34,7 +34,7 @@ public class StatisticsServiceImpl implements StatisticsService{
         int missed = 0;
         Date today = new Date();
 
-        for (Task task : tasks) {
+        for (Statistics task : tasks) {
             if (task.getStatus().equals("DONE")) {
                 completed++;
             } else {
@@ -64,7 +64,7 @@ public class StatisticsServiceImpl implements StatisticsService{
         HashMap<String, Object> resObj = new HashMap<>();
         SimpleDateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy");
 
-        for (Task task : tasks) {
+        for (Statistics task : tasks) {
             String month = formatter.format(task.getDueDate()).split(" ")[1];
             if (Arrays.asList(months).contains(month)) {
                 values[getMonthNumber(month) - 1]++;
@@ -86,7 +86,7 @@ public class StatisticsServiceImpl implements StatisticsService{
         List<Integer> completedTasks = new ArrayList<>();
         List<Integer> pendingTasks = new ArrayList<>();
 
-        for (Task i: tasks){
+        for (Statistics i: tasks){
             String assignee_id = i.getAssigneeId();
 
             if(assignee_id.equals(""))

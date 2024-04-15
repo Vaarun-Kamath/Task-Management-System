@@ -28,12 +28,13 @@ public class LoginController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> request) {
 
         try {
+            if (request == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing request body"));
+            }
+
             String email = request.get("email");
             String password = request.get("password");
-            if (email == null || password == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing email or password"));
-            }
 
             User user = loginService.authenticateUser(email, password);
 
@@ -44,16 +45,17 @@ public class LoginController {
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", userResponse));            
-        }
-        catch (UserNotFoundException e) {
+
+        } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
-        }
-        catch (AuthenticationException e) {
+                    .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Incorrect credentials"));
-        }
-        catch (Exception e) {
+                    .body(CommonResponse.getErrorResponse(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));

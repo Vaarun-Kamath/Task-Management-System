@@ -24,7 +24,7 @@ import com.workflow.server.utils.CommonResponse;
 public class TaskController {
 
     @Autowired
-    TaskService taskService;
+    private TaskService taskService;
 
     // Get Mappings
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.workflow.server.exceptions.ProjectNotFoundException;
 import com.workflow.server.model.Project;
 import com.workflow.server.services.ProjectService;
 import com.workflow.server.utils.CommonResponse;
@@ -55,6 +56,10 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projectService.getProjectById(project_id)));
 
+        } catch (ProjectNotFoundException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -27,6 +27,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUserByUsername(String username) {
+        if (username == null)
+            throw new IllegalArgumentException("Missing username");
+
         User user= userRepo.findByUsername(username);
         if (user == null)
             throw new UserNotFoundException("User with username: " + username + "not found");

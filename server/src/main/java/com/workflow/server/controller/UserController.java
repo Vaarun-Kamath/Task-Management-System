@@ -61,17 +61,16 @@ public class UserController {
     @PostMapping("/api/addCollaborator")
     public ResponseEntity<Map<String, Object>> addCollaborator(@RequestBody Map<String, String> request) {
         try {
-            String username = request.get("username");
-            String projectId = request.get("projectId");
-
-            if (username == null || projectId == null) {
+            if (request == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Username or project ID"));
+                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing request body"));
             }
 
+            String username = request.get("username");
+            String projectId = request.get("projectId");
             User data = userService.getUserByUsername(username);
-
             projectService.addCollaborator(projectId, data.get_id());
+            
             return ResponseEntity.status(HttpStatus.OK)
                     .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", "res"));
 

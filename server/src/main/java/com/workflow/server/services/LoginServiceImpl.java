@@ -24,6 +24,10 @@ public class LoginServiceImpl implements LoginService{
 
     @Override
     public User authenticateUser(String email, String password) {
+
+        if (email == null || password == null)
+            throw new IllegalArgumentException("Missing email or password");
+
         User user = checkLogin(email);
         if (user != null && user.getPassword().equals(password)) {
             // User is authenticated
