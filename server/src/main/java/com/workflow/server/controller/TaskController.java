@@ -36,7 +36,7 @@ public class TaskController {
                 return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(CommonResponse.getErrorResponse(
-                    HttpStatus.BAD_REQUEST.value(), 
+                    HttpStatus.BAD_REQUEST, 
                     "Something went wrong!! [Project missing]"
                 ));
             }
@@ -44,15 +44,19 @@ public class TaskController {
             return ResponseEntity
             .status(HttpStatus.OK)
             .body(CommonResponse.getSuccessResponse(
-                HttpStatus.OK.value(), 
+                HttpStatus.OK, 
                 "SUCCESS", 
                 taskService.getProjectTasks(projectId)
             ));
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
+            return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal server error"
+            ));
         }
     }
 
@@ -65,7 +69,7 @@ public class TaskController {
                 return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(CommonResponse.getErrorResponse(
-                    HttpStatus.BAD_REQUEST.value(), 
+                    HttpStatus.BAD_REQUEST, 
                     "Something went wrong!! [Project missing]"
                 ));
             }
@@ -75,15 +79,19 @@ public class TaskController {
             return ResponseEntity
             .status(HttpStatus.OK)
             .body(CommonResponse.getSuccessResponse(
-                HttpStatus.OK.value(), 
+                HttpStatus.OK, 
                 "SUCCESS", 
                 taskService.getTasksSorted(taskList, marginOfError)
             ));
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
+            return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal server error"
+            ));
         }
     }
 
@@ -97,7 +105,7 @@ public class TaskController {
                 return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(CommonResponse.getErrorResponse(
-                    HttpStatus.BAD_REQUEST.value(), 
+                    HttpStatus.BAD_REQUEST, 
                     "Missing Task"
                 ));
             }
@@ -106,7 +114,7 @@ public class TaskController {
             return ResponseEntity
             .status(HttpStatus.OK)
             .body(CommonResponse.getSuccessResponse(
-                HttpStatus.OK.value(), 
+                HttpStatus.OK, 
                 "Success", 
                 addedTask
             ));
@@ -120,7 +128,7 @@ public class TaskController {
             return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(CommonResponse.getErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(), 
+                HttpStatus.INTERNAL_SERVER_ERROR, 
                 "Internal server error"
             ));
         }
@@ -136,7 +144,7 @@ public class TaskController {
                 return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(CommonResponse.getErrorResponse(
-                    HttpStatus.BAD_REQUEST.value(),
+                    HttpStatus.BAD_REQUEST,
                     "Something went wrong!! [Project or updated Task missing]"
                 ));
             }
@@ -146,7 +154,7 @@ public class TaskController {
             return ResponseEntity
             .status(HttpStatus.OK)
             .body(CommonResponse.getSuccessResponse(
-                HttpStatus.OK.value(), 
+                HttpStatus.OK, 
                 "Success", 
                 savedTask
             ));
@@ -157,7 +165,7 @@ public class TaskController {
             return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(CommonResponse.getErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(), 
+                HttpStatus.INTERNAL_SERVER_ERROR, 
                 "Internal Server Error"
             ));
         }

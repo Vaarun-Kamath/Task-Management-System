@@ -29,18 +29,30 @@ public class StatisticsController {
 
       try {
         if (projectId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Something went wrong!! [Project missing]"));
+            return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                "Something went wrong!! [Project missing]"
+            ));
         }
 
         HashMap<String, Object> resobj = statisticsService.getProjectTasksBreakdown(projectId);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", resobj));
+        return ResponseEntity
+        .status(HttpStatus.OK)
+        .body(CommonResponse.getSuccessResponse(
+            HttpStatus.OK,
+            "SUCCESS", resobj
+        ));
 
       } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error"));
+        return ResponseEntity
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(CommonResponse.getErrorResponse(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "Internal Server Error"
+        ));
       }
     }
 
@@ -50,21 +62,33 @@ public class StatisticsController {
       try {
 
         if (projectId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Something went wrong!! [Project missing]"));
+            return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                "Something went wrong!! [Project missing]"
+            ));
         }
        
         HashMap<String, Object> resobj = statisticsService.getUserContributions(projectId); 
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", resobj));
+        return ResponseEntity
+        .status(HttpStatus.OK)
+        .body(CommonResponse.getSuccessResponse(
+            HttpStatus.OK,
+            "SUCCESS", resobj
+        ));
 
       } catch (AbstractException e) {
         return e.getErrorResponse();
 
       } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error"));
+        return ResponseEntity
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(CommonResponse.getErrorResponse(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "Internal Server Error"
+        ));
       }
     }
     
@@ -75,21 +99,33 @@ public class StatisticsController {
       try {
 
         if (projectId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Something went wrong!! [Project missing]"));
+            return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                "Something went wrong!! [Project missing]"
+            ));
         }
 
         HashMap<String, Object> resobj = statisticsService.getTasksTimeline(projectId); 
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", resobj));
+        return ResponseEntity
+        .status(HttpStatus.OK)
+        .body(CommonResponse.getSuccessResponse(
+            HttpStatus.OK,
+            "SUCCESS", resobj
+        ));
 
       } catch (AbstractException e) {
         return e.getErrorResponse();
         
       } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error"));
+        return ResponseEntity
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(CommonResponse.getErrorResponse(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "Internal Server Error"
+        ));
       }
     }   
 }

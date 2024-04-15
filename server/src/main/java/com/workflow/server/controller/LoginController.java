@@ -28,8 +28,12 @@ public class LoginController {
 
         try {
             if (request == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing request body"));
+                return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(CommonResponse.getErrorResponse(
+                    HttpStatus.BAD_REQUEST,
+                    "Missing request body"
+                ));
             }
 
             String email = request.get("email");
@@ -42,15 +46,24 @@ public class LoginController {
             userResponse.put("email", user.getEmail());
             userResponse.put("username", user.getUsername());
 
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", userResponse));            
+            return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(CommonResponse.getSuccessResponse(
+                HttpStatus.OK,
+                "Success",
+                userResponse
+            ));
 
         } catch (AbstractException e) {
             return e.getErrorResponse();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
+            return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal server error"
+            ));
         }
     }
 }

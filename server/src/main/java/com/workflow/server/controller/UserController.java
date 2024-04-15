@@ -35,22 +35,25 @@ public class UserController {
 
         try {
             if (userId == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing User ID"));
+                return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST, "Missing User ID"));
             }
 
             User user = userService.getUserById(userId);
 
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", user));
+            return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(CommonResponse.getSuccessResponse(HttpStatus.OK, "SUCCESS", user));
         
         } catch (AbstractException e) {
             e.printStackTrace();
             return e.getErrorResponse();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
+            return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"));
         }
     }
 
@@ -59,8 +62,9 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> addCollaborator(@RequestBody Map<String, String> request) {
         try {
             if (request == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing request body"));
+                return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST, "Missing request body"));
             }
 
             String username = request.get("username");
@@ -68,16 +72,18 @@ public class UserController {
             User data = userService.getUserByUsername(username);
             projectService.addCollaborator(projectId, data.get_id());
             
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", "res"));
+            return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(CommonResponse.getSuccessResponse(HttpStatus.OK, "Success", "res"));
 
         } catch (AbstractException e) {
             e.printStackTrace();
             return e.getErrorResponse();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
+            return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"));
         }
     }
 }

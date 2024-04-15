@@ -29,17 +29,29 @@ public class ProjectController {
     public ResponseEntity<Map<String, Object>> getAllProjects(@RequestParam String user_id) {
         try {
             if (user_id == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "You Must Login First"));
+                return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(CommonResponse.getErrorResponse(
+                    HttpStatus.BAD_REQUEST,
+                    "You Must Login First"));
             }
 
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projectService.getAllProjectsByUser(user_id)));
+            return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(CommonResponse.getSuccessResponse(
+                HttpStatus.OK,
+                "SUCCESS",
+                projectService.getAllProjectsByUser(user_id)
+            ));
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
+            return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal server error"
+            ));
         }
     }
 
@@ -49,12 +61,21 @@ public class ProjectController {
 
         try {
             if (project_id == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Project ID"));
+                return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(CommonResponse.getErrorResponse(
+                    HttpStatus.BAD_REQUEST,
+                    "Missing Project ID"
+                ));
             }
     
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "SUCCESS", projectService.getProjectById(project_id)));
+            return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(CommonResponse.getSuccessResponse(
+                HttpStatus.OK,
+                "SUCCESS",
+                projectService.getProjectById(project_id)
+            ));
 
         } catch (AbstractException e) {
             e.printStackTrace();
@@ -62,8 +83,12 @@ public class ProjectController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
+            return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal server error"
+            ));
         }
     }
 
@@ -76,13 +101,22 @@ public class ProjectController {
         try {
 
             if (newProj == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), "Missing Project Object"));
+                return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(CommonResponse.getErrorResponse(
+                    HttpStatus.BAD_REQUEST,
+                    "Missing Project Object"
+                ));
             }
 
             Project insertedProject = projectService.addProject(newProj);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", insertedProject));
+            return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(CommonResponse.getSuccessResponse(
+                HttpStatus.OK,
+                "Success",
+                insertedProject
+            ));
 
         } catch (AbstractException e) {
             e.printStackTrace();
@@ -90,8 +124,12 @@ public class ProjectController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
+            return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(CommonResponse.getErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal server error"
+            ));
         }
     }
 }
