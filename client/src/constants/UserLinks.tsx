@@ -8,12 +8,12 @@ const userLinks: Array<{
   //   link: "/home",
   // },
   {
-    name: "Projects",
-    link: "/projects",
-  },
-  {
     name: "User Statistics",
     link: "/userstatistics",
+  },
+  {
+    name: "Projects",
+    link: "/projects",
   },
 ];
 export default userLinks;
