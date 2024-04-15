@@ -3,6 +3,9 @@ import { Task, UserDetails } from '@/types';
 import { getColour, getColourStatus, timeInSec } from '@/utils/helperFunctions';
 import { useEffect, useState } from 'react';
 
+const YEAR2024 = 1704067200000;
+const LEAPYEAR = 31622400000;
+
 export default function TimelineTask({
   task,
   index,
@@ -43,12 +46,16 @@ export default function TimelineTask({
       }}
       title={task.description}
       style={{
-        left: (startTime - 1704067200000) / 316224000 + '%',
+        left: ((startTime - YEAR2024) / LEAPYEAR) * 100 + '%',
         top: index * 38 + 'px',
-        minWidth: (endTime - startTime) / 316224000 + '%',
+        minWidth:
+          (Math.min(endTime - startTime, LEAPYEAR + YEAR2024 - startTime) /
+            LEAPYEAR) *
+            100 +
+          '%',
       }}
       className={`
-        font-bold border-2 rounded-md scroll-m-0 scroll-p-0
+        font-bold border-2 rounded-md scroll-m-0 scroll-p-0 overflow-hidden
         absolute translate-x--1/2 justify-center text-center
         bg-gray-700 text-gray-700 border-${getColourStatus(task.status)}-500 
         hover:bg-gray-700 hover:text-${getColour(task.priority)}-500
