@@ -2,12 +2,13 @@ const userLinks: Array<{
   name: string;
   link: string;
 }> = [
+  // Home Page not built yet
+  // {
+  //   name: "Home",
+  //   link: "/home",
+  // },
   {
-    name: "Home",
-    link: "/home",
-  },
-  {
-    name: "Project",
+    name: "Projects",
     link: "/projects",
   },
   {

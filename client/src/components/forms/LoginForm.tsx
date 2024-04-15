@@ -58,12 +58,12 @@ export default function LoginForm(props: Props) {
         email: email.toString(),
         password: password.toString(),
         redirect: false,
-        callbackUrl: props.callbackUrl ? props.callbackUrl : "/home",
+        callbackUrl: props.callbackUrl ? props.callbackUrl : "/projects", //"/home", not built
       });
       if (res?.error) {
         errorHandler(res.error);
       } else {
-        router.push(props.callbackUrl ? props.callbackUrl : "/home");
+        router.push(props.callbackUrl ? props.callbackUrl : "/projects"); //"/home"); not built
       }
     } catch (err) {
       errorHandler("Please try again after some time");

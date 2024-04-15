@@ -5,7 +5,7 @@ export default async function LoginPage({
 }: {
   searchParams: { [key: string]: string | null };
 }) {
-  const callbackUrl = searchParams.callbackUrl! || "/home";
+  const callbackUrl = searchParams.callbackUrl! || "/projects"; //"/home" is not built;
   return (
     <>
       <div className="w-full h-screen flex justify-center items-center">

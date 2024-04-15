@@ -4,14 +4,6 @@ import java.util.Date;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-// import java.util.Date; 
-
-// public class Statistics extends Task {
-//     public Statistics() {
-//         super();
-//     }
-// }
-
 @Document(collection = "task")
 public class Statistics {
     private String _id;
