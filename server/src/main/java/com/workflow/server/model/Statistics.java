@@ -46,24 +46,6 @@ public class Statistics {
         return status;
     }
 
-    //Settters
-
-    public void setDueDate(Date newDueDate) {
-        dueDate = newDueDate;
-    }
-
-    public void setCreatedBy (String creatorId) {
-        createdBy = creatorId;
-    }
-
-    public void setAssigneeId(String assigneeId) {
-        this.assigneeId = assigneeId;
-    }
-    
-    public void setStatus(String newStatus){
-        status = newStatus;
-    }
-
     @Override
     public String toString(){
         return "Task{" +
