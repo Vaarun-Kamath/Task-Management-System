@@ -74,7 +74,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(CommonResponse.getSuccessResponse(HttpStatus.OK.value(), "Success", "res"));
 
-        } catch (UserAlreadyCollaboratorException | UserIsProjectCreatorException e) {
+        } catch (UserAlreadyCollaboratorException | UserIsProjectCreatorException | IllegalArgumentException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
@@ -82,10 +82,6 @@ public class UserController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(CommonResponse.getErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(CommonResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
