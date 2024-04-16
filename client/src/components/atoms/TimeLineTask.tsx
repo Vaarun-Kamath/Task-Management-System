@@ -16,8 +16,12 @@ export default function TimelineTask({
   const [loadText, setText] = useState<boolean>(false);
   const [fullDisplay, setDisplay] = useState<boolean>(false);
   const [collaborator, setCollaborator] = useState<UserDetails | null>(null);
+  const [isAnimated, setAnimated] = useState<boolean>(false);
   var startTime = timeInSec(task.createdOn);
   var endTime = timeInSec(task.dueDate);
+  var leftPos = (startTime - YEAR2024) / LEAPYEAR;
+  var minWidth =
+    Math.min(endTime - startTime, LEAPYEAR + YEAR2024 - startTime) / LEAPYEAR;
 
   useEffect(() => {
     const fetchTaskData = async () => {
@@ -26,6 +30,7 @@ export default function TimelineTask({
           const response = await GetUserById(task.assigneeId);
           console.log(response, response.content); /////////////////
           setCollaborator(response.content);
+          setAnimated(true);
         }
       } catch (error) {
         console.error('Error fetching data[Tasks]:', error);
@@ -46,16 +51,13 @@ export default function TimelineTask({
       }}
       title={task.description}
       style={{
-        left: ((startTime - YEAR2024) / LEAPYEAR) * 100 + '%',
+        left: `${leftPos * 100}%`,
         top: index * 38 + 'px',
-        minWidth:
-          (Math.min(endTime - startTime, LEAPYEAR + YEAR2024 - startTime) /
-            LEAPYEAR) *
-            100 +
-          '%',
+        minWidth: `${minWidth * 100}%`,
       }}
       className={`
-        font-bold border-2 rounded-md scroll-m-0 scroll-p-0 overflow-hidden
+        font-bold border-2 rounded-md scroll-m-0 scroll-p-0 overflow-hidden 
+        animate-slide
         absolute translate-x--1/2 justify-center text-center
         bg-gray-700 text-gray-700 border-${getColourStatus(task.status)}-500 
         hover:bg-gray-700 hover:text-${getColour(task.priority)}-500
@@ -73,6 +75,19 @@ export default function TimelineTask({
           )}
         </div>
       )}
+      <style jsx>{`
+        @keyframes slide${task.id} {
+          from {
+            left: 0px;
+          }
+          to {
+            left: ${leftPos * 100}%;
+          }
+        }
+        .animate-slide {
+          animation: slide${task.id} 1s ease-out;
+        }
+      `}</style>
     </div>
   );
 }
